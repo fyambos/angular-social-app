@@ -32,11 +32,12 @@ export class UserService {
           joinedDate: userData['joinedDate'] || '',
         } as UserProfile;
       } else {
+        console.error(`User profile not found for uid: ${uid}, document path: users/${uid}`);
         throw new Error('User profile not found');
       }
     });
   }
-
+  
   updateUserProfile(uid: string, updatedProfile: any): Promise<void> {
     const userDocRef = doc(this.firestore, `users/${uid}`);
     return updateDoc(userDocRef, updatedProfile);

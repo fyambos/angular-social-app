@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from 'src/app/services/user.service';
+import { PostService } from 'src/app/services/post.service';
 import { EditProfileDialogComponent } from 'src/app/components/edit-profile-dialog/edit-profile-dialog.component';
 import { User } from 'src/app/models/user.model';
 import { Post } from 'src/app/models/post.model';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-profile',
@@ -16,44 +18,42 @@ export class ProfileComponent implements OnInit {
     profilePicture: 'assets/default-profile-picture.jpg',
     joinedDate: ''
   };
-
   posts: Post[] = [];
+  currentUserUid: string = '';
 
-  constructor(public dialog: MatDialog, private userService: UserService) {}
+  constructor(
+    public dialog: MatDialog,
+    private userService: UserService,
+    private postService: PostService,
+    private auth: Auth
+  ) {}
 
   ngOnInit(): void {
-    this.userService.getCurrentUser().subscribe((user) => {
+    onAuthStateChanged(this.auth, (user) => {
       if (user) {
-        this.userService.fetchUserProfile(user.uid).then((profile) => {
-          this.userProfile = profile;
-          this.updatePosts();
-        });
+        this.currentUserUid = user.uid;
+        this.fetchUserProfile(user.uid); 
+        this.loadUserPosts(user.uid); 
       }
     });
-    
   }
-  updatePosts(): void {
-    this.posts = [
-      {
-        user: this.userProfile,  // Ensure user is properly set here
-        title: 'My first post',
-        content: 'This is my very first post! Excited to share my thoughts here.',
-        date: '2024-12-23'
-      },
-      {
-        user: this.userProfile,
-        title: 'Angular is awesome!',
-        content: 'I have been learning Angular for a while now, and it is amazing!',
-        date: '2024-12-22'
-      },
-      {
-        user: this.userProfile,
-        title: 'TailwindCSS is great!',
-        content: 'I just started using TailwindCSS and I love how it makes styling easier.',
-        date: '2024-12-21'
-      }
-    ];
+
+  private fetchUserProfile(uid: string): void {
+    this.userService.fetchUserProfile(uid).then((profile) => {
+      this.userProfile = profile;
+    }).catch((error) => {
+      console.error('Error fetching user profile:', error);
+    });
   }
+
+  private async loadUserPosts(uid: string): Promise<void> {
+    try {
+      this.posts = await this.postService.getPostsByUserId(uid);
+    } catch (error) {
+      console.error('Error fetching user posts:', error);
+    }
+  }
+  
 
   openEditProfileDialog(): void {
     const dialogRef = this.dialog.open(EditProfileDialogComponent, {

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../../services/auth.service';
-import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
+import { EditProfileDialogComponent } from 'src/app/components/edit-profile-dialog/edit-profile-dialog.component';
 
 interface Post {
   title: string;
@@ -38,16 +40,13 @@ export class ProfileComponent implements OnInit {
     }
   ];
 
-  constructor(private auth: Auth, private firestore: Firestore, private authService: AuthService) {}
+  constructor(private auth: Auth, private firestore: Firestore, public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    // Listen for auth state changes
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
-        // User is logged in, fetch their profile data
         this.fetchUserProfile(user.uid);
       } else {
-        // User is not logged in, reset the profile
         this.userProfile = {
           nickname: '',
           bio: '',
@@ -69,5 +68,32 @@ export class ProfileComponent implements OnInit {
       .catch((error) => {
         console.error('Error fetching user profile:', error);
       });
+  }
+
+  openEditProfileDialog(): void {
+    const dialogRef = this.dialog.open(EditProfileDialogComponent, {
+      width: '400px',
+      data: { ...this.userProfile }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.updateUserProfile(result);
+      }
+    });
+  }
+
+  private updateUserProfile(updatedProfile: any): void {
+    const user = this.auth.currentUser;
+    if (user) {
+      const userDocRef = doc(this.firestore, `users/${user.uid}`);
+      updateDoc(userDocRef, updatedProfile)
+        .then(() => {
+          this.userProfile = { ...this.userProfile, ...updatedProfile };
+        })
+        .catch((error) => {
+          console.error('Error updating profile:', error);
+        });
+    }
   }
 }

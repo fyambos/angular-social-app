@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Edit Profile</h2>
+<div mat-dialog-content>
+  <div class="mb-4">
+    <label class="block font-medium mb-1">Nickname</label>
+    <input
+      type="text"
+      [(ngModel)]="data.nickname"
+      class="w-full border border-gray-300 rounded px-3 py-2"
+    />
+  </div>
+  <div class="mb-4">
+    <label class="block font-medium mb-1">Bio</label>
+    <textarea
+      [(ngModel)]="data.bio"
+      rows="3"
+      class="w-full border border-gray-300 rounded px-3 py-2"
+    ></textarea>
+  </div>
+  <div class="mb-4">
+    <label class="block font-medium mb-1">Profile Picture URL</label>
+    <input
+      type="text"
+      [(ngModel)]="data.profilePicture"
+      class="w-full border border-gray-300 rounded px-3 py-2"
+    />
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSave()">Save</button>
+</div>

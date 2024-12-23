@@ -7,6 +7,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,6 +21,7 @@ import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { EditProfileDialogComponent } from './components/edit-profile-dialog/edit-profile-dialog.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { ProfileComponent } from './pages/profile/profile.component';
     LoginComponent,
     SignupComponent,
     HeaderComponent,
-    ProfileComponent
+    ProfileComponent,
+    EditProfileDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -44,6 +47,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
     MatIconModule,
     MatMenuModule,
     MatToolbarModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

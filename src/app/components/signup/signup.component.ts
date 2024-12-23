@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -10,11 +11,17 @@ export class SignupComponent {
   password: string = '';
   signupError: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   signup() {
     this.authService
       .signUp(this.email, this.password)
+      .then(() => {
+        this.router.navigate(['/home']);
+      })
       .catch((error) => {
         this.signupError = error.message;
       });

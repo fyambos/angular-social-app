@@ -12,7 +12,13 @@ interface Post {
 })
 export class ProfileComponent implements OnInit {
 
-  // Fake posts data
+  userProfile = {
+    username: 'john_doe',
+    bio: 'Web developer with a passion for Angular and TypeScript. Love exploring new technologies.',
+    joinedDate: '2024-01-15',
+    profilePicture: 'assets/default-profile-picture.jpg'
+  };
+
   posts: Post[] = [
     {
       title: 'My first post',

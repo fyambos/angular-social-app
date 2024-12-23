@@ -23,6 +23,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { EditProfileDialogComponent } from './components/edit-profile-dialog/edit-profile-dialog.component';
 import { HomeComponent } from './pages/home/home.component';
+import { NewPostDialogComponent } from './components/new-post-dialog/new-post-dialog.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { HomeComponent } from './pages/home/home.component';
     HeaderComponent,
     ProfileComponent,
     EditProfileDialogComponent,
-    HomeComponent
+    HomeComponent,
+    NewPostDialogComponent
   ],
   imports: [
     BrowserModule,

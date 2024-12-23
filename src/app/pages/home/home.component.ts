@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { User } from 'src/app/models/user.model';
 import { Post } from 'src/app/models/post.model';
-
+import { NewPostDialogComponent } from 'src/app/components/new-post-dialog/new-post-dialog.component';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -33,8 +34,23 @@ export class HomeComponent implements OnInit {
       date: '2024-12-21',
     },
   ];
+  userProfile: User = this.users[0];
 
-  constructor() {}
+  constructor(private dialog: MatDialog) {}
 
   ngOnInit(): void {}
+  openNewPostDialog(): void {
+    const dialogRef = this.dialog.open(NewPostDialogComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe((newPost) => {
+      if (newPost) {
+        this.posts.push({
+          user: this.userProfile,
+          ...newPost,
+        });
+      }
+    });
+  }
 }

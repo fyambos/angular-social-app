@@ -46,6 +46,7 @@ export class ProfileComponent implements OnInit {
         if (!this.displayedUserUid) {
           this.fetchUserProfile(this.currentUserUid);
           this.loadUserPosts(this.currentUserUid);
+          this.displayedUserUid = this.currentUserUid;
         }
       }
     });
@@ -88,5 +89,9 @@ export class ProfileComponent implements OnInit {
         });
       }
     });
+  }
+
+  isCurrentUserProfile(): boolean {
+    return this.currentUserUid === this.displayedUserUid;
   }
 }

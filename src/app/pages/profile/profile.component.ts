@@ -3,12 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserService } from 'src/app/services/user.service';
 import { EditProfileDialogComponent } from 'src/app/components/edit-profile-dialog/edit-profile-dialog.component';
 import { User } from 'src/app/models/user.model';
-
-interface Post {
-  title: string;
-  content: string;
-  date: string;
-}
+import { Post } from 'src/app/models/post.model';
 
 @Component({
   selector: 'app-profile',
@@ -22,23 +17,7 @@ export class ProfileComponent implements OnInit {
     joinedDate: ''
   };
 
-  posts: Post[] = [
-    {
-      title: 'My first post',
-      content: 'This is my very first post! Excited to share my thoughts here.',
-      date: '2024-12-23'
-    },
-    {
-      title: 'Angular is awesome!',
-      content: 'I have been learning Angular for a while now, and it is amazing!',
-      date: '2024-12-22'
-    },
-    {
-      title: 'TailwindCSS is great!',
-      content: 'I just started using TailwindCSS and I love how it makes styling easier.',
-      date: '2024-12-21'
-    }
-  ];
+  posts: Post[] = [];
 
   constructor(public dialog: MatDialog, private userService: UserService) {}
 
@@ -47,9 +26,33 @@ export class ProfileComponent implements OnInit {
       if (user) {
         this.userService.fetchUserProfile(user.uid).then((profile) => {
           this.userProfile = profile;
+          this.updatePosts();
         });
       }
     });
+    
+  }
+  updatePosts(): void {
+    this.posts = [
+      {
+        user: this.userProfile,  // Ensure user is properly set here
+        title: 'My first post',
+        content: 'This is my very first post! Excited to share my thoughts here.',
+        date: '2024-12-23'
+      },
+      {
+        user: this.userProfile,
+        title: 'Angular is awesome!',
+        content: 'I have been learning Angular for a while now, and it is amazing!',
+        date: '2024-12-22'
+      },
+      {
+        user: this.userProfile,
+        title: 'TailwindCSS is great!',
+        content: 'I just started using TailwindCSS and I love how it makes styling easier.',
+        date: '2024-12-21'
+      }
+    ];
   }
 
   openEditProfileDialog(): void {

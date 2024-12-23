@@ -15,7 +15,10 @@
       Edit Profile
     </button>
     <div *ngFor="let post of posts" class="post-card bg-white p-4 mb-4 rounded shadow-md">
-      <h3 class="text-xl font-semibold">{{ post.title }}</h3>
+      <div class="flex justify-between mb-2">
+        <h3 class="text-xl font-semibold">{{ post.title }}</h3>
+        <span class="text-sm text-gray-500">{{ post.user.nickname }}</span>
+      </div>
       <p class="text-gray-600">{{ post.content }}</p>
       <span class="text-sm text-gray-500">{{ post.date }}</span>
     </div>

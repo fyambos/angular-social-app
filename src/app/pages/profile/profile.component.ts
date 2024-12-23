@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 
 interface Post {
   title: string;
@@ -11,14 +14,12 @@ interface Post {
   templateUrl: './profile.component.html',
 })
 export class ProfileComponent implements OnInit {
-
   userProfile = {
-    username: 'john_doe',
-    bio: 'Web developer with a passion for Angular and TypeScript. Love exploring new technologies.',
-    joinedDate: '2024-01-15',
-    profilePicture: 'assets/default-profile-picture.jpg'
+    nickname: '',
+    bio: '',
+    profilePicture: 'assets/default-profile-picture.jpg',
+    joinedDate: ''
   };
-
   posts: Post[] = [
     {
       title: 'My first post',
@@ -37,7 +38,36 @@ export class ProfileComponent implements OnInit {
     }
   ];
 
-  constructor() {}
+  constructor(private auth: Auth, private firestore: Firestore, private authService: AuthService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Listen for auth state changes
+    onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        // User is logged in, fetch their profile data
+        this.fetchUserProfile(user.uid);
+      } else {
+        // User is not logged in, reset the profile
+        this.userProfile = {
+          nickname: '',
+          bio: '',
+          profilePicture: 'assets/default-profile-picture.jpg',
+          joinedDate: ''
+        };
+      }
+    });
+  }
+
+  private fetchUserProfile(uid: string): void {
+    const userDocRef = doc(this.firestore, `users/${uid}`);
+    getDoc(userDocRef)
+      .then((docSnap) => {
+        if (docSnap.exists()) {
+          this.userProfile = docSnap.data() as any;
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching user profile:', error);
+      });
+  }
 }

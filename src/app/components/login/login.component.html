@@ -1,0 +1,25 @@
+<div class="p-8 flex flex-col items-center">
+    <h1 class="text-2xl font-bold mb-4">Login</h1>
+    <form (ngSubmit)="login()">
+      <mat-form-field class="w-full">
+        <input matInput [(ngModel)]="email" name="email" placeholder="Email" type="email" required>
+      </mat-form-field>
+      <mat-form-field class="w-full">
+        <input matInput [(ngModel)]="password" name="password" placeholder="Password" type="password" required>
+      </mat-form-field>
+  
+      <div *ngIf="loginError" class="text-red-500 mb-4">
+        {{ loginError }}
+      </div>
+  
+      <button mat-raised-button color="primary" class="w-full mt-4" type="submit">Login</button>
+    </form>
+  
+    <div class="mt-4">
+      <p class="text-sm text-gray-600">
+        Don't have an account? 
+        <a [routerLink]="'/signup'" class="text-blue-500 hover:underline">Sign up here</a>
+      </p>
+    </div>
+  </div>
+  

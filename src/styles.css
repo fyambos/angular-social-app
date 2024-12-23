@@ -4,3 +4,19 @@
 @tailwind utilities;
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Global styles for snackbars */
+.success-snackbar {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .error-snackbar {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  /* Optional styling for the error message in the form */
+  .text-red-500 {
+    color: #f44336;
+  }
+  

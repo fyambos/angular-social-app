@@ -46,7 +46,7 @@ src/
 
    - Créez un projet sur [Firebase Console](https://console.firebase.google.com/).
    - Ajoutez une nouvelle application Web.
-   - Copiez les informations de configuration de Firebase (API Key, Auth Domain, etc.) et ajoutez-les dans le fichier `src/environments/environment.ts`.
+   - Copiez les informations de configuration de Firebase (API Key, Auth Domain, etc.) et ajoutez-les dans le fichier `src/environments/env.dev.ts`.
 
    Exemple :
    

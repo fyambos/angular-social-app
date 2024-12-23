@@ -22,6 +22,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { EditProfileDialogComponent } from './components/edit-profile-dialog/edit-profile-dialog.component';
+import { HomeComponent } from './pages/home/home.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { EditProfileDialogComponent } from './components/edit-profile-dialog/edi
     SignupComponent,
     HeaderComponent,
     ProfileComponent,
-    EditProfileDialogComponent
+    EditProfileDialogComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

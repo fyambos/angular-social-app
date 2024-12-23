@@ -1,27 +1,87 @@
-# SocialApp
+# Project Name
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.16.
+## 🌟 Fonctionnalités
 
-## Development server
+- **Authentification Firebase**: Utilisation de Firebase pour gérer l'authentification des utilisateurs.
+- **Gestion des utilisateurs**: Affichage et modification des profils utilisateurs.
+- **Création de posts**: Ajout de nouveaux posts avec titre, contenu et date de publication.
+- **Affichage des posts**: Affichage des posts des utilisateurs avec leur photo de profil et leurs détails.
+- **Modération de profil**: Édition du profil utilisateur (nickname, bio, photo de profil).
+- **Firebase Firestore**: Sauvegarde et récupération des données des utilisateurs et des posts à partir de Firestore.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 📂 Structure du projet
 
-## Code scaffolding
+```plaintext
+src/
+├── app/
+│   ├── components/               # Composants Angular (dialogs, etc.)
+│   ├── models/                   # Modèles (User, Post, etc.)
+│   ├── services/                 # Services Angular (auth, user, post)
+│   ├── pages/                    # Pages principales (Home, Profile, etc.)
+│   ├── app.module.ts             # Module principal d'Angular
+│   ├── app-routing.module.ts     # Configuration des routes
+└── assets/                       # Ressources statiques (images, etc.)
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## 🚀 Installation et Lancement
 
-## Build
+1. **Cloner le projet**
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+   Clonez le projet depuis GitHub sur votre machine locale :
 
-## Running unit tests
+   ```bash
+   git clone https://github.com/your-username/project-name.git
+   ```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+2. **Installation des dépendances**
 
-## Running end-to-end tests
+   Accédez au répertoire du projet et installez les dépendances avec npm :
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+   ```bash
+   cd project-name
+   npm install
+   ```
 
-## Further help
+3. **Configuration de Firebase**
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+   - Créez un projet sur [Firebase Console](https://console.firebase.google.com/).
+   - Ajoutez une nouvelle application Web.
+   - Copiez les informations de configuration de Firebase (API Key, Auth Domain, etc.) et ajoutez-les dans le fichier `src/environments/environment.ts`.
+
+   Exemple :
+   
+   ```ts
+   export const environment = {
+     production: false,
+     firebaseConfig: {
+       apiKey: 'your-api-key',
+       authDomain: 'your-auth-domain',
+       projectId: 'your-project-id',
+       storageBucket: 'your-storage-bucket',
+       messagingSenderId: 'your-messaging-sender-id',
+       appId: 'your-app-id',
+     }
+   };
+   ```
+
+4. **Lancer le projet**
+
+   Une fois les dépendances installées et la configuration de Firebase effectuée, lancez l'application Angular :
+
+   ```
+   ng serve
+   ```
+
+   Ouvrez votre navigateur et allez sur [http://localhost:4200](http://localhost:4200) pour voir l'application en action.
+
+## 🛠️ Technologies Utilisées
+
+- **Angular**: Framework JavaScript pour construire l'application web.
+- **Firebase**: Utilisé pour l'authentification des utilisateurs et la gestion des bases de données (Firestore).
+- **Angular Material**: Composants UI pour une meilleure expérience utilisateur.
+- **TailwindCSS**: Utilisé pour le style et la mise en page réactive.
+
+## 📜 Licence
+
+Ce projet est sous licence [MIT](https://opensource.org/licenses/MIT).
+

@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthService } from '../../services/auth.service';
-import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
-import { Auth, onAuthStateChanged } from '@angular/fire/auth';
+import { UserService } from 'src/app/services/user.service';
 import { EditProfileDialogComponent } from 'src/app/components/edit-profile-dialog/edit-profile-dialog.component';
+import { User } from 'src/app/models/user.model';
 
 interface Post {
   title: string;
@@ -16,12 +15,13 @@ interface Post {
   templateUrl: './profile.component.html',
 })
 export class ProfileComponent implements OnInit {
-  userProfile = {
+  userProfile: User = {
     nickname: '',
     bio: '',
     profilePicture: 'assets/default-profile-picture.jpg',
     joinedDate: ''
   };
+
   posts: Post[] = [
     {
       title: 'My first post',
@@ -40,34 +40,16 @@ export class ProfileComponent implements OnInit {
     }
   ];
 
-  constructor(private auth: Auth, private firestore: Firestore, public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog, private userService: UserService) {}
 
   ngOnInit(): void {
-    onAuthStateChanged(this.auth, (user) => {
+    this.userService.getCurrentUser().subscribe((user) => {
       if (user) {
-        this.fetchUserProfile(user.uid);
-      } else {
-        this.userProfile = {
-          nickname: '',
-          bio: '',
-          profilePicture: 'assets/default-profile-picture.jpg',
-          joinedDate: ''
-        };
+        this.userService.fetchUserProfile(user.uid).then((profile) => {
+          this.userProfile = profile;
+        });
       }
     });
-  }
-
-  private fetchUserProfile(uid: string): void {
-    const userDocRef = doc(this.firestore, `users/${uid}`);
-    getDoc(userDocRef)
-      .then((docSnap) => {
-        if (docSnap.exists()) {
-          this.userProfile = docSnap.data() as any;
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching user profile:', error);
-      });
   }
 
   openEditProfileDialog(): void {
@@ -84,16 +66,12 @@ export class ProfileComponent implements OnInit {
   }
 
   private updateUserProfile(updatedProfile: any): void {
-    const user = this.auth.currentUser;
-    if (user) {
-      const userDocRef = doc(this.firestore, `users/${user.uid}`);
-      updateDoc(userDocRef, updatedProfile)
-        .then(() => {
+    this.userService.getCurrentUser().subscribe((user) => {
+      if (user) {
+        this.userService.updateUserProfile(user.uid, updatedProfile).then(() => {
           this.userProfile = { ...this.userProfile, ...updatedProfile };
-        })
-        .catch((error) => {
-          console.error('Error updating profile:', error);
         });
-    }
+      }
+    });
   }
 }

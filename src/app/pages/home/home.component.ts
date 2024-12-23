@@ -1,16 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
-interface User {
-  nickname: string;
-  profilePicture: string;
-}
-
-interface Post {
-  user: User;
-  title: string;
-  content: string;
-  date: string;
-}
+import { User } from 'src/app/models/user.model';
+import { Post } from 'src/app/models/post.model';
 
 @Component({
   selector: 'app-home',
@@ -18,9 +8,9 @@ interface Post {
 })
 export class HomeComponent implements OnInit {
   users: User[] = [
-    { nickname: 'JohnDoe', profilePicture: 'assets/default-profile-picture.jpg' },
-    { nickname: 'JaneSmith', profilePicture: 'assets/default-profile-picture.jpg' },
-    { nickname: 'DevGuru', profilePicture: 'assets/default-profile-picture.jpg' },
+    { nickname: 'JohnDoe', profilePicture: 'assets/default-profile-picture.jpg', bio: 'Angular enthusiast', joinedDate: '2023-01-01' },
+    { nickname: 'JaneSmith', profilePicture: 'assets/default-profile-picture.jpg', bio: 'CSS expert', joinedDate: '2023-02-01' },
+    { nickname: 'DevGuru', profilePicture: 'assets/default-profile-picture.jpg', bio: 'Full-stack developer', joinedDate: '2023-03-01' },
   ];
 
   posts: Post[] = [

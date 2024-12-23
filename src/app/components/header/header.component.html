@@ -1,0 +1,29 @@
+<mat-toolbar class="flex justify-between items-center relative" color="primary">
+    <a routerLink="/" mat-button class="text-3xl">TODO</a>
+    <div class="flex items-center space-x-4">
+      <div>
+        <button mat-icon-button [matMenuTriggerFor]="userMenu">
+          <mat-icon>person</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <ng-container *ngIf="user; else notLoggedIn">
+            <button mat-menu-item disabled>
+              Connected as: {{ user.email }}
+            </button>
+            <button mat-menu-item (click)="logout()">
+              <mat-icon>logout</mat-icon> Log Out
+            </button>
+          </ng-container>
+          <ng-template #notLoggedIn>
+            <button mat-menu-item routerLink="/login">
+              <mat-icon>login</mat-icon> Sign In
+            </button>
+            <button mat-menu-item routerLink="/signup">
+              <mat-icon>login</mat-icon> Sign Up
+            </button>
+          </ng-template>
+        </mat-menu>
+      </div>
+    </div>
+  </mat-toolbar>
+  

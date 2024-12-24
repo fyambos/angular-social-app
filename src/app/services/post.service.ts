@@ -39,10 +39,11 @@ export class PostService {
         };
         postsList.push(post);
       }
-      
+      postsList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       this.posts$.next(postsList);
     });
   }
+  
 
   async addPost(newPost: Post): Promise<void> {
     try {
@@ -78,13 +79,14 @@ export class PostService {
           likes: data['likes'] || [],
         } as Post;
       }));
-  
+      postsList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       return postsList;
     } catch (error) {
       console.error('Error fetching posts by userId:', error);
       throw new Error('Error fetching posts');
     }
   }
+
   likePost(postId: string, userId: string): Promise<void> {
     const postRef = doc(this.firestore, `posts/${postId}`);
     return updateDoc(postRef, {

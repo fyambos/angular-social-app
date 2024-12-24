@@ -119,4 +119,49 @@ export class PostService {
     }
   }
 
+  async addReply(postId: string, replyContent: string, currentUserUid: string): Promise<void> {
+    const originalPost = await this.getPostById(postId);
+    console.log('postId:', postId, 'originalPost:', originalPost, 'replyContent', replyContent, 'currentUserUid', currentUserUid);
+
+    const replyPost = {
+      id: '',
+      userId: currentUserUid,
+      user: await this.userService.fetchUserProfile(currentUserUid),
+      title: 'Re: ' + originalPost.title,
+      content: replyContent,
+      date: new Date().toISOString(),
+      likes: [],
+      replyToPostId: postId
+    };
+
+    try {
+      await this.addPost(replyPost);
+    } catch (error) {
+      console.error('Error adding reply:', error);
+    }
+  }
+
+  async getReplies(postId: string): Promise<Post[]> {
+    const postsCollection = collection(this.firestore, 'posts');
+    const repliesQuery = query(postsCollection, where('replyToPostId', '==', postId));
+    const querySnapshot = await getDocs(repliesQuery);
+    
+    const replies: Post[] = [];
+    for (const doc of querySnapshot.docs) {
+      const replyData = doc.data();
+      const user = await this.userService.fetchUserProfile(replyData['userId']);
+      const reply: Post = {
+        user,
+        id: doc.id,
+        title: replyData['title'],
+        content: replyData['content'],
+        date: replyData['date'],
+        likes: replyData['likes'] || [],
+        replyToPostId: replyData['replyToPostId']
+      };
+      replies.push(reply);
+    }
+    return replies;
+  }
+
 }

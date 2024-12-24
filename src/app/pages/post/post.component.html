@@ -4,5 +4,11 @@
       [post]="post"
       [currentUserUid]="currentUserUid"
     ></app-post-card>
+    <div class="replies">
+      <h3>Replies:</h3>
+      <div *ngFor="let reply of replies">
+        <div>{{ reply.content }}</div>
+      </div>
+    </div>
 </div>
   

@@ -30,5 +30,20 @@
       </button>
       <span class="text-gray-700">{{ post.likes.length === 0 ? '' : post.likes.length }}</span>
     </div>
+    <div class="mt-4">
+      <input
+        type="text"
+        [(ngModel)]="replyContent"
+        placeholder="Write a reply..."
+        class="w-full p-2 border rounded"
+      />
+      <button
+        (click)="replyToPost()"
+        class="bg-blue-500 text-white rounded p-2 mt-2"
+        [disabled]="!replyContent.trim()"
+      >
+        Reply
+      </button>
+    </div>
   </div>
   

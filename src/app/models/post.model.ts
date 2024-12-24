@@ -7,4 +7,5 @@ export interface Post {
   content: string;
   date: string;
   likes: string[];
+  replyToPostId?: string;
 }

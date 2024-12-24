@@ -11,6 +11,7 @@ import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 export class PostComponent implements OnInit {
   post!: Post;
   currentUserUid: string = '';
+  replies: Post[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -22,6 +23,10 @@ export class PostComponent implements OnInit {
     const postId = this.route.snapshot.paramMap.get('uid');
     if (postId) {
       this.loadPost(postId);
+      this.postService.getPostById(postId).then(post => {
+        this.post = post;
+        this.loadReplies();
+      });
     }
 
     onAuthStateChanged(this.auth, (user) => {
@@ -37,6 +42,14 @@ export class PostComponent implements OnInit {
       this.post = post;
     } catch (error) {
       console.error('Error loading post:', error);
+    }
+  }
+
+  loadReplies(): void {
+    if (this.post) {
+      this.postService.getReplies(this.post.id).then(replies => {
+        this.replies = replies;
+      });
     }
   }
   

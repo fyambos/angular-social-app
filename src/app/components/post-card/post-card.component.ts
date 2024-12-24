@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class PostCardComponent {
   @Input() post!: Post;
   @Input() currentUserUid: string = '';
+  replyContent: string = '';
 
   constructor(
     private postService: PostService,
@@ -46,5 +47,11 @@ export class PostCardComponent {
   }
   navigateToPostView(): void {
     this.router.navigate(['/post', this.post.id]);
+  }
+  replyToPost(): void {
+    if (this.replyContent.trim() !== '') {
+      this.postService.addReply(this.post.id, this.replyContent, this.currentUserUid);
+      this.replyContent = '';
+    }
   }
 }

@@ -67,6 +67,7 @@ export class PostService {
           title: data['title'],
           content: data['content'],
           date: data['date'],
+          likes: data['likes'] || [],
         } as Post;
       }));
   

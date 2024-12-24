@@ -19,4 +19,22 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   .text-red-500 {
     color: #f44336;
   }
+
+  .like-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    color: rgb(210, 206, 206);
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s ease;
+  }
+  
+  .like-button.liked {
+    color: red;
+  }
+  
   

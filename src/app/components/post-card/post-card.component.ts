@@ -11,6 +11,7 @@ export class PostCardComponent {
   @Input() post!: Post;
   @Input() currentUserUid: string = '';
   replyContent: string = '';
+  showReplyInput: boolean = false;
 
   constructor(
     private postService: PostService,
@@ -42,16 +43,33 @@ export class PostCardComponent {
         console.error('Error toggling like:', error);
       });
   }
+
   navigateToUserProfile(): void {
     this.router.navigate(['/profile', this.post.user.id]);
   }
+
   navigateToPostView(): void {
     this.router.navigate(['/post', this.post.id]);
   }
-  replyToPost(): void {
-    if (this.replyContent.trim() !== '') {
-      this.postService.addReply(this.post.id, this.replyContent, this.currentUserUid);
+
+  toggleReplyInput(): void {
+    this.showReplyInput = !this.showReplyInput;
+    if (!this.showReplyInput) {
       this.replyContent = '';
+    }
+  }
+
+  saveReply(): void {
+    if (this.replyContent.trim() !== '') {
+      this.postService
+        .addReply(this.post.id, this.replyContent, this.currentUserUid)
+        .then(() => {
+          this.replyContent = '';
+          this.showReplyInput = false;
+        })
+        .catch(error => {
+          console.error('Error saving reply:', error);
+        });
     }
   }
 }

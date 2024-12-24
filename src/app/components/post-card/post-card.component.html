@@ -31,19 +31,30 @@
       <span class="text-gray-700">{{ post.likes.length === 0 ? '' : post.likes.length }}</span>
     </div>
     <div class="mt-4">
-      <input
-        type="text"
-        [(ngModel)]="replyContent"
-        placeholder="Write a reply..."
-        class="w-full p-2 border rounded"
-      />
       <button
-        (click)="replyToPost()"
-        class="bg-blue-500 text-white rounded p-2 mt-2"
-        [disabled]="!replyContent.trim()"
+        (click)="toggleReplyInput()"
+        class="text-blue-500 underline"
       >
         Reply
       </button>
+  
+      <div *ngIf="showReplyInput" class="mt-2">
+        <textarea
+          [(ngModel)]="replyContent"
+          rows="3"
+          placeholder="Write your reply..."
+          class="w-full p-2 border rounded"
+        ></textarea>
+        <div class="flex justify-end mt-2">
+          <button
+            (click)="saveReply()"
+            class="bg-blue-500 text-white px-4 py-2 rounded"
+            [disabled]="!replyContent.trim()"
+          >
+            Save Reply
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   

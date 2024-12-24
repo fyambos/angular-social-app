@@ -121,8 +121,6 @@ export class PostService {
 
   async addReply(postId: string, replyContent: string, currentUserUid: string): Promise<void> {
     const originalPost = await this.getPostById(postId);
-    console.log('postId:', postId, 'originalPost:', originalPost, 'replyContent', replyContent, 'currentUserUid', currentUserUid);
-
     const replyPost = {
       id: '',
       userId: currentUserUid,

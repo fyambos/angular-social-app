@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, getDocs, query, where } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, getDocs, query, where, updateDoc, doc, arrayRemove, arrayUnion } from '@angular/fire/firestore';
 import { Post } from 'src/app/models/post.model';
 import { UserService } from './user.service'; 
 
@@ -36,7 +36,8 @@ export class PostService {
           user, // Set the user object fetched by userId
           title: postData['title'],
           content: postData['content'],
-          date: postData['date']
+          date: postData['date'],
+          likes: postData['likes'] || [],
         };
         postsList.push(post);
       }
@@ -73,5 +74,17 @@ export class PostService {
       throw new Error('Error fetching posts');
     }
   }
-  
+  likePost(postId: string, userId: string): Promise<void> {
+    const postRef = doc(this.firestore, `posts/${postId}`);
+    return updateDoc(postRef, {
+      likes: arrayUnion(userId),
+    });
+  }
+
+  unlikePost(postId: string, userId: string): Promise<void> {
+    const postRef = doc(this.firestore, `posts/${postId}`);
+    return updateDoc(postRef, {
+      likes: arrayRemove(userId),
+    });
+  }
 }

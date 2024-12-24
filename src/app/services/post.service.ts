@@ -34,6 +34,7 @@ export class PostService {
         
         const post: Post = {
           user, // Set the user object fetched by userId
+          id: docSnap.id,
           title: postData['title'],
           content: postData['content'],
           date: postData['date'],
@@ -62,6 +63,7 @@ export class PostService {
         
         return {
           user: userProfile,
+          id: doc.id,
           title: data['title'],
           content: data['content'],
           date: data['date'],

@@ -14,6 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 export class HomeComponent implements OnInit {
   posts: Post[] = [];
   userProfile: User = {
+    id: '',
     nickname: '',
     profilePicture: 'assets/default-profile-picture.jpg',
     bio: '',

@@ -14,6 +14,7 @@ import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 })
 export class ProfileComponent implements OnInit {
   userProfile: User = {
+    id: '',
     nickname: '',
     bio: '',
     profilePicture: 'assets/default-profile-picture.jpg',

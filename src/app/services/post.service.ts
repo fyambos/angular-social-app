@@ -1,34 +1,31 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, getDocs, query, where, updateDoc, doc, arrayRemove, arrayUnion } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, getDocs, query, where, updateDoc, doc, arrayRemove, arrayUnion, onSnapshot } from '@angular/fire/firestore';
 import { Post } from 'src/app/models/post.model';
-import { UserService } from './user.service'; 
+import { UserService } from './user.service';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
+  private posts$ = new BehaviorSubject<Post[]>([]);
+
   constructor(
     private firestore: Firestore,
     private userService: UserService
   ) {}
 
-  async addPost(newPost: Post): Promise<void> {
-    try {
-      const postsCollection = collection(this.firestore, 'posts');
-      await addDoc(postsCollection, newPost);
-    } catch (error) {
-      console.error('Error adding post:', error);
-      throw new Error('Error adding post');
-    }
+  getPosts$(): Observable<Post[]> {
+    return this.posts$.asObservable();
   }
 
-  async getPosts(): Promise<Post[]> {
-    try {
-      const postsCollection = collection(this.firestore, 'posts');
-      const postsSnapshot = await getDocs(postsCollection);
-      
+  async initializePosts(): Promise<void> {
+    const postsCollection = collection(this.firestore, 'posts');
+    
+    onSnapshot(postsCollection, async (snapshot) => {
       const postsList: Post[] = [];
-      for (const docSnap of postsSnapshot.docs) {
+      
+      for (const docSnap of snapshot.docs) {
         const postData = docSnap.data();
         const user = await this.userService.fetchUserProfile(postData['userId']);
         
@@ -42,11 +39,22 @@ export class PostService {
         };
         postsList.push(post);
       }
+      
+      this.posts$.next(postsList);
+    });
+  }
 
-      return postsList;
+  async addPost(newPost: Post): Promise<void> {
+    try {
+      const postsCollection = collection(this.firestore, 'posts');
+      await addDoc(postsCollection, {
+        ...newPost,
+        date: new Date().toISOString(),
+        likes: []
+      });
     } catch (error) {
-      console.error('Error fetching posts: ', error);
-      throw new Error('Error fetching posts');
+      console.error('Error adding post:', error);
+      throw new Error('Error adding post');
     }
   }
 

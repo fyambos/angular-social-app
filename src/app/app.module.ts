@@ -24,6 +24,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { EditProfileDialogComponent } from './components/edit-profile-dialog/edit-profile-dialog.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NewPostDialogComponent } from './components/new-post-dialog/new-post-dialog.component';
+import { PostCardComponent } from './components/post-card/post-card.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { NewPostDialogComponent } from './components/new-post-dialog/new-post-di
     ProfileComponent,
     EditProfileDialogComponent,
     HomeComponent,
-    NewPostDialogComponent
+    NewPostDialogComponent,
+    PostCardComponent
   ],
   imports: [
     BrowserModule,

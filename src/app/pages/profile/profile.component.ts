@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';  // Import ActivatedRoute to get route parameters
+import { ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { PostService } from 'src/app/services/post.service';
 import { EditProfileDialogComponent } from 'src/app/components/edit-profile-dialog/edit-profile-dialog.component';
+import { NewPostDialogComponent } from 'src/app/components/new-post-dialog/new-post-dialog.component';
 import { User } from 'src/app/models/user.model';
 import { Post } from 'src/app/models/post.model';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
@@ -63,7 +64,9 @@ export class ProfileComponent implements OnInit {
 
   private async loadUserPosts(uid: string): Promise<void> {
     try {
-      this.posts = await this.postService.getPostsByUserId(uid);
+      this.postService.getPostsByUserId(uid).subscribe((posts) => {
+        this.posts = posts;
+      });
     } catch (error) {
       console.error('Error fetching user posts:', error);
     }
@@ -94,5 +97,26 @@ export class ProfileComponent implements OnInit {
 
   isCurrentUserProfile(): boolean {
     return this.currentUserUid === this.displayedUserUid;
+  }
+
+  openNewPostDialog(): void {
+    const dialogRef = this.dialog.open(NewPostDialogComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe((newPost) => {
+      if (newPost) {
+        const postToAdd = {
+          userId: this.currentUserUid,
+          user: this.userProfile,
+          ...newPost,
+          likes: []
+        };
+
+        this.postService.addPost(postToAdd).catch((error) => {
+          console.error('Error adding new post:', error);
+        });
+      }
+    });
   }
 }

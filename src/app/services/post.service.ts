@@ -59,32 +59,30 @@ export class PostService {
     }
   }
 
-  async getPostsByUserId(userId: string): Promise<Post[]> {
-    try {
-      const postsCollection = collection(this.firestore, 'posts');
-      const postsQuery = query(postsCollection, where('userId', '==', userId));
-      const postsSnapshot = await getDocs(postsQuery);
+  getPostsByUserId(userId: string): Observable<Post[]> {
+    const postsCollection = collection(this.firestore, 'posts');
+    const postsQuery = query(postsCollection, where('userId', '==', userId));
   
-      const postsList: Post[] = await Promise.all(postsSnapshot.docs.map(async (doc) => {
-        const data = doc.data();
-        
-        const userProfile = await this.userService.fetchUserProfile(userId);
-        
-        return {
-          user: userProfile,
-          id: doc.id,
-          title: data['title'],
-          content: data['content'],
-          date: data['date'],
-          likes: data['likes'] || [],
-        } as Post;
-      }));
-      postsList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      return postsList;
-    } catch (error) {
-      console.error('Error fetching posts by userId:', error);
-      throw new Error('Error fetching posts');
-    }
+    return new Observable<Post[]>((observer) => {
+          const unsubscribe = onSnapshot(postsQuery, async (snapshot) => {
+            const postsList: Post[] = await Promise.all(snapshot.docs.map(async (doc) => {
+              const data = doc.data();
+              const user = await this.userService.fetchUserProfile(data['userId']);
+              return {
+                id: doc.id,
+                title: data['title'],
+                content: data['content'],
+                date: data['date'],
+                likes: data['likes'] || [],
+                user
+              };
+            }));
+            postsList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+            observer.next(postsList);
+          });
+      
+          return () => unsubscribe();
+        });
   }
 
   likePost(postId: string, userId: string): Promise<void> {

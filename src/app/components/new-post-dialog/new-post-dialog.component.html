@@ -1,19 +1,32 @@
 <h2 mat-dialog-title>Create a New Post</h2>
-<mat-dialog-content>
-  <div class="form-group">
-    <mat-form-field class="w-full" appearance="fill">
-      <mat-label>Post Title</mat-label>
-      <input matInput [(ngModel)]="title" placeholder="Enter post title" />
-    </mat-form-field>
+<div mat-dialog-content>
+  <div class="mb-4">
+    <label class="block font-medium mb-1">Post Title</label>
+    <input
+      type="text"
+      [(ngModel)]="title"
+      class="w-full border border-gray-300 rounded px-3 py-2"
+      placeholder="Enter post title"
+    />
   </div>
-  <div class="form-group">
-    <mat-form-field class="w-full" appearance="fill">
-      <mat-label>Post Content</mat-label>
-      <textarea matInput [(ngModel)]="content" placeholder="Enter post content"></textarea>
-    </mat-form-field>
+  <div class="mb-4">
+    <label class="block font-medium mb-1">Post Content</label>
+    <textarea
+      [(ngModel)]="content"
+      rows="4"
+      class="w-full border border-gray-300 rounded px-3 py-2"
+      placeholder="Enter post content"
+    ></textarea>
   </div>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button color="primary" (click)="onSave()">Save</button>
-</mat-dialog-actions>
+</div>
+<div mat-dialog-actions>
+  <div class="w-full flex justify-end">
+    <button mat-button (click)="onCancel()" class="ml-2 bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">
+      Cancel
+    </button>
+    <button mat-raised-button color="primary" (click)="onSave()" class="ml-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+      Save
+    </button>
+  </div>
+</div>
+

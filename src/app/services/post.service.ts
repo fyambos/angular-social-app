@@ -30,10 +30,10 @@ export class PostService {
       const postsList: Post[] = [];
       for (const docSnap of postsSnapshot.docs) {
         const postData = docSnap.data();
-        const user = await this.userService.fetchUserProfile(postData['userId']); // Fetch user by userId
+        const user = await this.userService.fetchUserProfile(postData['userId']);
         
         const post: Post = {
-          user, // Set the user object fetched by userId
+          user,
           id: docSnap.id,
           title: postData['title'],
           content: postData['content'],

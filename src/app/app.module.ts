@@ -16,7 +16,6 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from 'src/environments/env.dev';
-import { CreatePostComponent } from './components/create-post/create-post.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -29,7 +28,6 @@ import { PostCardComponent } from './components/post-card/post-card.component';
 @NgModule({
   declarations: [
     AppComponent,
-    CreatePostComponent,
     LoginComponent,
     SignupComponent,
     HeaderComponent,

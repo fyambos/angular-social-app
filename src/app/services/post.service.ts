@@ -21,28 +21,32 @@ export class PostService {
 
   async initializePosts(): Promise<void> {
     const postsCollection = collection(this.firestore, 'posts');
-    
+  
     onSnapshot(postsCollection, async (snapshot) => {
       const postsList: Post[] = [];
-      
+  
       for (const docSnap of snapshot.docs) {
         const postData = docSnap.data();
-        const user = await this.userService.fetchUserProfile(postData['userId']);
-        
-        const post: Post = {
-          user,
-          id: docSnap.id,
-          title: postData['title'],
-          content: postData['content'],
-          date: postData['date'],
-          likes: postData['likes'] || [],
-        };
-        postsList.push(post);
+  
+        if (!postData['replyToPostId']) {
+          const user = await this.userService.fetchUserProfile(postData['userId']);
+          
+          const post: Post = {
+            user,
+            id: docSnap.id,
+            title: postData['title'],
+            content: postData['content'],
+            date: postData['date'],
+            likes: postData['likes'] || [],
+          };
+          postsList.push(post);
+        }
       }
       postsList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       this.posts$.next(postsList);
     });
   }
+  
   
 
   async addPost(newPost: Post): Promise<void> {
@@ -62,28 +66,30 @@ export class PostService {
   getPostsByUserId(userId: string): Observable<Post[]> {
     const postsCollection = collection(this.firestore, 'posts');
     const postsQuery = query(postsCollection, where('userId', '==', userId));
-  
     return new Observable<Post[]>((observer) => {
-          const unsubscribe = onSnapshot(postsQuery, async (snapshot) => {
-            const postsList: Post[] = await Promise.all(snapshot.docs.map(async (doc) => {
-              const data = doc.data();
-              const user = await this.userService.fetchUserProfile(data['userId']);
-              return {
-                id: doc.id,
-                title: data['title'],
-                content: data['content'],
-                date: data['date'],
-                likes: data['likes'] || [],
-                user
-              };
-            }));
-            postsList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-            observer.next(postsList);
-          });
-      
-          return () => unsubscribe();
-        });
+      const unsubscribe = onSnapshot(postsQuery, async (snapshot) => {
+        const postsList: Post[] = await Promise.all(snapshot.docs.map(async (doc) => {
+          const data = doc.data();
+          const user = await this.userService.fetchUserProfile(data['userId']);
+          return {
+            id: doc.id,
+            title: data['title'],
+            content: data['content'],
+            date: data['date'],
+            likes: data['likes'] || [],
+            user,
+            replyToPostId: data['replyToPostId'] || null,
+          } as Post & { replyToPostId?: string };
+        }));
+        const filteredPosts = postsList.filter(post => !post.replyToPostId);
+        filteredPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        observer.next(filteredPosts);
+      });
+      return () => unsubscribe();
+    });
   }
+  
+  
 
   likePost(postId: string, userId: string): Promise<void> {
     const postRef = doc(this.firestore, `posts/${postId}`);

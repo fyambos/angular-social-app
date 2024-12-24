@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Post } from 'src/app/models/post.model';
 import { PostService } from 'src/app/services/post.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post-card',
@@ -10,7 +11,10 @@ export class PostCardComponent {
   @Input() post!: Post;
   @Input() currentUserUid: string = '';
 
-  constructor(private postService: PostService) {}
+  constructor(
+    private postService: PostService,
+    private router: Router,
+  ) {}
 
   get isLikedByCurrentUser(): boolean {
     return this.post.likes?.includes(this.currentUserUid) ?? false;
@@ -36,5 +40,8 @@ export class PostCardComponent {
       .catch(error => {
         console.error('Error toggling like:', error);
       });
+  }
+  navigateToUserProfile(): void {
+    this.router.navigate(['/profile', this.post.user.id]);
   }
 }

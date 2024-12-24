@@ -26,6 +26,7 @@ export class UserService {
       if (docSnap.exists()) {
         const userData = docSnap.data();
         return {
+          id: uid,
           nickname: userData['nickname'] || '',
           profilePicture: userData['profilePicture'] || 'assets/default-profile-picture.jpg',
           bio: userData['bio'] || '',

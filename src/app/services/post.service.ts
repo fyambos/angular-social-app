@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, getDocs, query, where, updateDoc, doc, arrayRemove, arrayUnion, onSnapshot } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, getDocs, query, where, updateDoc, doc, arrayRemove, arrayUnion, onSnapshot, getDoc } from '@angular/fire/firestore';
 import { Post } from 'src/app/models/post.model';
 import { UserService } from './user.service';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -100,4 +100,25 @@ export class PostService {
       likes: arrayRemove(userId),
     });
   }
+
+  async getPostById(postId: string): Promise<Post> {
+    const postDocRef = doc(this.firestore, `posts/${postId}`);
+    const postDocSnap = await getDoc(postDocRef);
+  
+    if (postDocSnap.exists()) {
+      const postData = postDocSnap.data();
+      const user = await this.userService.fetchUserProfile(postData['userId']);
+      return {
+        user,
+        id: postId,
+        title: postData['title'],
+        content: postData['content'],
+        date: postData['date'],
+        likes: postData['likes'] || [],
+      };
+    } else {
+      throw new Error('Post not found');
+    }
+  }
+
 }

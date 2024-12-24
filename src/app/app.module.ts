@@ -25,6 +25,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { NewPostDialogComponent } from './components/new-post-dialog/new-post-dialog.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { RelativeDatePipe } from './pipes/relative-date.pipe';
+import { PostComponent } from './pages/post/post.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { RelativeDatePipe } from './pipes/relative-date.pipe';
     HomeComponent,
     NewPostDialogComponent,
     PostCardComponent,
-    RelativeDatePipe
+    RelativeDatePipe,
+    PostComponent
   ],
   imports: [
     BrowserModule,

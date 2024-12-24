@@ -44,4 +44,7 @@ export class PostCardComponent {
   navigateToUserProfile(): void {
     this.router.navigate(['/profile', this.post.user.id]);
   }
+  navigateToPostView(): void {
+    this.router.navigate(['/post', this.post.id]);
+  }
 }

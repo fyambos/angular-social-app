@@ -1,27 +1,33 @@
 <div class="flex h-screen">
-    <div class="w-full p-4 overflow-y-auto">
-      <h2 class="text-lg font-bold mb-4">Conversations</h2>
-      <ul>
-        <li
-          *ngFor="let conversation of conversations"
-          class="p-4 mb-4 rounded hover:bg-gray-200 cursor-pointer border-b border-gray-300"
-          [routerLink]="'/messages/' + conversation.recipientId"
-        >
-          <div class="flex items-center space-x-4">
-            <img
-              *ngIf="conversation.profilePicture"
-              [src]="conversation.profilePicture"
-              alt="Profile Picture"
-              class="w-10 h-10 rounded-full"
-            />
-            <div class="min-w-0 flex-1">
-              <h3 class="font-medium">{{ conversation.nickname }}</h3>
-              <p class="text-sm text-gray-500 truncate">{{ conversation.lastMessage }}</p>
-            </div>
-            <span class="text-xs text-gray-400">{{ conversation.lastMessageTimestamp | relativeDate }}</span>
+  <div class="w-full p-4 overflow-y-auto">
+    <h2 class="text-lg font-bold mb-4">Conversations</h2>
+    <ul>
+      <li
+        *ngFor="let conversation of conversations"
+        class="p-4 mb-4 rounded hover:bg-gray-200 cursor-pointer border-b border-gray-300 relative"
+        [routerLink]="'/messages/' + conversation.recipientId"
+      >
+        <div class="flex items-center space-x-4">
+          <img
+            *ngIf="conversation.profilePicture"
+            [src]="conversation.profilePicture"
+            alt="Profile Picture"
+            class="w-10 h-10 rounded-full"
+          />
+          <div class="min-w-0 flex-1">
+            <h3 class="font-medium">{{ conversation.nickname }}</h3>
+            <p class="text-sm text-gray-500 truncate">{{ conversation.lastMessage }}</p>
           </div>
-        </li>
-      </ul>
-    </div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xs text-gray-400">{{ conversation.lastMessageTimestamp | relativeDate }}</span>
+            <span 
+              *ngIf="conversation.unreadCount > 0" 
+              class="absolute top-4 right-0 bg-blue-500 text-white px-2 py-1 rounded-full text-xs -translate-x-1/2 -translate-y-1/2">
+              {{ conversation.unreadCount }}
+            </span>
+          </div>
+        </div>
+      </li>
+    </ul>
   </div>
-  
+</div>

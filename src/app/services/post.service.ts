@@ -243,7 +243,7 @@ export class PostService {
       orderBy('content')
     );
     return new Observable<any[]>((observer) => {
-      const unsubscribePosts = onSnapshot(titleQuery, async (snapshot) => {
+      const unsubscribeTitle = onSnapshot(titleQuery, async (snapshot) => {
         const postsList = await Promise.all(snapshot.docs.map(async (doc) => {
           const postData = doc.data();
           const userId = postData['userId'];
@@ -264,7 +264,7 @@ export class PostService {
       });
 
       return () => {
-        unsubscribePosts();
+        unsubscribeTitle();
         unsubscribeContent();
       };
     });

@@ -3,4 +3,6 @@ export interface Message {
     recipientId: string;
     text: string;
     timestamp: string;
+    participants?: string[];
+    read?: boolean;
   }

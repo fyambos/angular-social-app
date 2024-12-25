@@ -9,15 +9,21 @@
             [class.bg-gray-300]="conversation.recipientId === recipientId">
           <div class="flex items-start space-x-3">
             <img *ngIf="conversation.profilePicture"
-                 [src]="conversation.profilePicture"
-                 alt="Profile Picture"
-                 class="w-7 h-7 rounded-full flex-shrink-0" />
+                [src]="conversation.profilePicture"
+                alt="Profile Picture"
+                class="w-7 h-7 rounded-full flex-shrink-0" />
             <div class="min-w-0 flex-1">
               <h3 class="font-medium truncate">{{ conversation.nickname }}</h3>
               <p class="text-sm text-gray-500 truncate">{{ conversation.lastMessage }}</p>
             </div>
-            <div class="text-sm text-gray-400">
-              {{ conversation.lastMessageTimestamp | relativeDate }}
+            <div class="flex items-center space-x-2">
+              <span class="text-sm text-gray-400">
+                {{ conversation.lastMessageTimestamp | relativeDate }}
+              </span>
+              <span *ngIf="conversation.unreadCount > 0" 
+                class="bg-blue-500 text-white px-2 py-1 rounded-full text-xs">
+                {{ conversation.unreadCount }}
+              </span>
             </div>
           </div>
         </li>

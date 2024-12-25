@@ -37,6 +37,7 @@ export class MessageComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       this.recipientId = params.get('recipientId') || '';
       this.loadRecipient(); 
+      this.loadMessages();
     });
   }
 
@@ -60,17 +61,17 @@ export class MessageComponent implements OnInit {
         .getMessages(this.currentUserId, this.recipientId)
         .subscribe((messages) => {
           this.messages = messages;
+          this.messageService.markMessagesAsRead(this.currentUserId, this.recipientId);
         });
     }
   }
-
+  
   loadConversations(): void {
     if (this.currentUserId) {
-      this.messageService
-        .getConversations(this.currentUserId)
-        .subscribe((conversations) => {
-          this.conversations = conversations;
-        });
+      this.messageService.conversations$.subscribe((conversations) => {
+        this.conversations = conversations;
+      });
+      this.messageService.getConversations(this.currentUserId);
     }
   }
 

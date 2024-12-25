@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, query, where, orderBy, addDoc, collectionGroup, doc, getDoc, onSnapshot } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Firestore, collection, query, where, orderBy, addDoc, collectionGroup, doc, getDoc, onSnapshot, updateDoc, getDocs, writeBatch } from '@angular/fire/firestore';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Message } from '../models/message.model';
 import { Conversation } from '../models/conversation.model';
 
@@ -8,54 +8,52 @@ import { Conversation } from '../models/conversation.model';
   providedIn: 'root',
 })
 export class MessageService {
+  private conversationsSubject = new BehaviorSubject<Conversation[]>([]);
+  conversations$ = this.conversationsSubject.asObservable();
+
   constructor(private firestore: Firestore) {}
 
-  getConversations(currentUserId: string): Observable<Conversation[]> {
-    return new Observable(subscriber => {
-      const q = query(
-        collectionGroup(this.firestore, 'messages'),
-        where('participants', 'array-contains', currentUserId),
-        orderBy('timestamp', 'desc')
-      );
-
-      const unsubscribe = onSnapshot(q, async (querySnapshot) => {
-        const conversationsMap = new Map<string, Conversation>();
-        
-        querySnapshot.forEach(doc => {
-          const message = doc.data() as Message;
-          const otherUserId = message.senderId === currentUserId 
-            ? message.recipientId 
-            : message.senderId;
-
-          if (!conversationsMap.has(otherUserId) || 
-              (conversationsMap.get(otherUserId)?.lastMessageTimestamp ?? 0) < message.timestamp) {
-            conversationsMap.set(otherUserId, {
-              recipientId: otherUserId,
-              nickname: '',
-              profilePicture: '',
-              lastMessage: message.text,
-              lastMessageTimestamp: message.timestamp
-            });
-          }
-        });
-
-        const conversations = Array.from(conversationsMap.values());
-        for (const conversation of conversations) {
-          const userDoc = await getDoc(doc(this.firestore, 'users', conversation.recipientId));
-          const userData = userDoc.data();
-          
-          if (userData) {
-            conversation.nickname = userData['nickname'] || 'Unknown User';
-            conversation.profilePicture = userData['profilePicture'] || '';
+  getConversations(currentUserId: string): void {
+    const q = query(
+      collectionGroup(this.firestore, 'messages'),
+      where('participants', 'array-contains', currentUserId),
+      orderBy('timestamp', 'desc')
+    );
+  
+    onSnapshot(q, async (querySnapshot) => {
+      const conversationsMap = new Map<string, Conversation>();
+      querySnapshot.forEach(doc => {
+        const message = doc.data() as Message;
+        const otherUserId = message.senderId === currentUserId 
+          ? message.recipientId 
+          : message.senderId;
+  
+        const isUnread = !message.read && message.recipientId === currentUserId;
+  
+        if (!conversationsMap.has(otherUserId)) {
+          conversationsMap.set(otherUserId, {
+            recipientId: otherUserId,
+            nickname: '',
+            profilePicture: '',
+            lastMessage: message.text,
+            lastMessageTimestamp: message.timestamp,
+            unreadCount: isUnread ? 1 : 0,
+          });
+        } else {
+          const conversation = conversationsMap.get(otherUserId)!;
+          conversation.unreadCount += isUnread ? 1 : 0;
+          if (conversation.lastMessageTimestamp < message.timestamp) {
+            conversation.lastMessage = message.text;
+            conversation.lastMessageTimestamp = message.timestamp;
           }
         }
-
-        subscriber.next(conversations);
       });
-
-      return () => unsubscribe();
+  
+      const conversations = Array.from(conversationsMap.values());
+      this.conversationsSubject.next(conversations);
     });
   }
+  
 
   getMessages(currentUserId: string, recipientId: string): Observable<Message[]> {
     return new Observable(subscriber => {
@@ -64,15 +62,23 @@ export class MessageService {
         where('participants', '==', [currentUserId, recipientId].sort()),
         orderBy('timestamp', 'asc')
       );
-
+  
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const messages = querySnapshot.docs.map(doc => doc.data() as Message);
+        const messages = querySnapshot.docs.map(doc => {
+          const data = doc.data() as Message;
+          if (!data.read && data.recipientId === currentUserId) {
+            const messageRef = doc.ref;
+            updateDoc(messageRef, { read: true });
+          }
+          return { id: doc.id, ...data };
+        });
+  
         subscriber.next(messages);
       });
-
+  
       return () => unsubscribe();
     });
-  }
+  }  
 
   async sendMessage(
     currentUserId: string,
@@ -84,18 +90,38 @@ export class MessageService {
       recipientId: recipientId,
       text: messageText,
       timestamp: new Date().toISOString(),
+      read: false,
     };
-
+  
     const messageWithParticipants = {
       ...newMessage,
-      participants: [currentUserId, recipientId].sort()
+      participants: [currentUserId, recipientId].sort(),
     };
-
+  
     await addDoc(
       collection(this.firestore, 'messages'),
       messageWithParticipants
     );
-
+  
     return newMessage;
+  }  
+
+  async markMessagesAsRead(currentUserId: string, recipientId: string): Promise<void> {
+    const q = query(
+      collection(this.firestore, 'messages'),
+      where('participants', '==', [currentUserId, recipientId].sort()),
+      where('read', '==', false),
+      where('recipientId', '==', currentUserId) // Only mark messages sent to the current user
+    );
+  
+    const querySnapshot = await getDocs(q);
+    const batch = writeBatch(this.firestore);
+  
+    querySnapshot.forEach(doc => {
+      batch.update(doc.ref, { read: true });
+    });
+  
+    await batch.commit();
   }
+  
 }

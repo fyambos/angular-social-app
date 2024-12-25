@@ -1,15 +1,19 @@
 <div class="footer-spacer"></div>
 <div class="fixed bottom-0 left-0 w-full bg-gray-100 text-black shadow-md">
-    <div class="flex justify-around p-4">
-      <a routerLink="/home" routerLinkActive="text-blue-500" class="flex flex-col items-center text-gray-400 hover:text-blue-500">
-        <i class="fas fa-home text-2xl"></i>
-      </a>
-      <a routerLink="/search" routerLinkActive="text-blue-500" class="flex flex-col items-center text-gray-400 hover:text-blue-500">
-        <i class="fas fa-search text-2xl"></i>
-      </a>
-      <a routerLink="/messages" routerLinkActive="text-blue-500" class="flex flex-col items-center text-gray-400 hover:text-blue-500">
-        <i class="fas fa-comments text-2xl"></i>
-      </a>
-    </div>
+  <div class="flex justify-around p-4">
+    <a routerLink="/home" routerLinkActive="text-blue-500" class="flex flex-col items-center text-gray-400 hover:text-blue-500">
+      <i class="fas fa-home text-2xl"></i>
+    </a>
+    <a routerLink="/search" routerLinkActive="text-blue-500" class="flex flex-col items-center text-gray-400 hover:text-blue-500">
+      <i class="fas fa-search text-2xl"></i>
+    </a>
+    <a routerLink="/messages" routerLinkActive="text-blue-500" class="flex flex-col items-center text-gray-400 hover:text-blue-500 relative">
+      <i class="fas fa-comments text-2xl"></i>
+      <span
+        *ngIf="totalUnreadCount > 0"
+        class="absolute -top-2 -right-2 bg-blue-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+        {{ totalUnreadCount }}
+      </span>
+    </a>
+  </div>
 </div>
-  

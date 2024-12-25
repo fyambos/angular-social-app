@@ -47,7 +47,6 @@ ngOnInit(): void {
     if (this.selectedTab === 'posts') {
       this.postService.searchPosts(this.query).subscribe((posts) => {
         this.results = posts;
-        console.log(posts);
         this.loading = false;
       });
     } else {

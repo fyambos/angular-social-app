@@ -7,7 +7,10 @@
     <div class="replies">
       <h3>Replies:</h3>
       <div *ngFor="let reply of replies">
-        <div>{{ reply.content }}</div>
+        <app-post-card
+        [post]="reply"
+        [currentUserUid]="currentUserUid"
+      ></app-post-card>
       </div>
     </div>
 </div>

@@ -37,7 +37,9 @@
         >
           <mat-icon>favorite</mat-icon>
         </button>
-        <span class="text-gray-700 ml-2">
+        <span
+        class="text-gray-700 ml-2 cursor-pointer"
+        (click)="openLikesModal()">
           {{ post.likes.length === 0 ? '' : post.likes.length }}
         </span>
       </div>

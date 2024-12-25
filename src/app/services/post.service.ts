@@ -3,6 +3,7 @@ import { Firestore, collection, addDoc, getDocs, query, where, updateDoc, doc, a
 import { Post } from 'src/app/models/post.model';
 import { UserService } from './user.service';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { User } from 'src/app/models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -172,4 +173,25 @@ export class PostService {
     return snapshot.size;
   }
 
+  async getUsersWhoLiked(postId: string): Promise<User[]> {
+    const postRef = doc(this.firestore, `posts/${postId}`);
+    const postSnapshot = await getDoc(postRef);
+  
+    if (postSnapshot.exists()) {
+      const postData = postSnapshot.data();
+      const userIds: string[] = postData['likes'] || [];
+  
+      const users = await Promise.all(
+        userIds.map(async (userId) => {
+          return this.userService.fetchUserProfile(userId);
+        })
+      );
+  
+      return users;
+    } else {
+      throw new Error('Post not found');
+    }
+  }
+  
+  
 }

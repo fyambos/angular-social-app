@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>Users who liked this post</h2>
+<div mat-dialog-content>
+  <ul>
+    <li *ngFor="let user of data.users">
+      <div class="flex items-center">
+        <img
+          [src]="user.profilePicture"
+          alt="{{ user.nickname }}"
+          class="w-8 h-8 rounded-full mr-2"
+        />
+        <span>{{ user.nickname }}</span>
+      </div>
+    </li>
+  </ul>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</div>

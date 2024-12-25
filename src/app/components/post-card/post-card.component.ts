@@ -2,6 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Post } from 'src/app/models/post.model';
 import { PostService } from 'src/app/services/post.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { LikesModalComponent } from 'src/app/components/likes-modal/likes-modal.component';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-post-card',
@@ -17,6 +20,7 @@ export class PostCardComponent implements OnInit {
   constructor(
     private postService: PostService,
     private router: Router,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -84,6 +88,17 @@ export class PostCardComponent implements OnInit {
       this.repliesCount = count;
     }).catch(error => {
       console.error('Error loading replies count:', error);
+    });
+  }
+
+  openLikesModal(): void {
+    this.postService.getUsersWhoLiked(this.post.id).then((users: User[]) => {
+      this.dialog.open(LikesModalComponent, {
+        width: '400px',
+        data: { users },
+      });
+    }).catch(error => {
+      console.error('Error fetching likes:', error);
     });
   }
 }

@@ -26,6 +26,7 @@ import { NewPostDialogComponent } from './components/new-post-dialog/new-post-di
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { RelativeDatePipe } from './pipes/relative-date.pipe';
 import { PostComponent } from './pages/post/post.component';
+import { LikesModalComponent } from './components/likes-modal/likes-modal.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { PostComponent } from './pages/post/post.component';
     NewPostDialogComponent,
     PostCardComponent,
     RelativeDatePipe,
-    PostComponent
+    PostComponent,
+    LikesModalComponent
   ],
   imports: [
     BrowserModule,

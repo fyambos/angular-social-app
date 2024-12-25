@@ -29,12 +29,6 @@
     </button>
     <div class="flex items-center space-x-4">
       <div class="flex items-center">
-        <mat-icon>chat_bubble_outline</mat-icon>
-        <span class="text-gray-700 ml-2">
-          {{ repliesCount }}
-        </span>
-      </div>
-      <div class="flex items-center">
         <button
           class="like-button"
           [class.liked]="isLikedByCurrentUser"
@@ -45,6 +39,12 @@
         </button>
         <span class="text-gray-700 ml-2">
           {{ post.likes.length === 0 ? '' : post.likes.length }}
+        </span>
+      </div>
+      <div class="flex items-center cursor-pointer" (click)="navigateToPostView()">
+        <mat-icon>chat_bubble_outline</mat-icon>
+        <span class="text-gray-700 ml-2">
+          {{ repliesCount }}
         </span>
       </div>
     </div>

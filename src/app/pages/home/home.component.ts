@@ -71,7 +71,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (newPost) {
         const postToAdd = {
           userId: this.currentUserUid,
-          user: this.userProfile,
           ...newPost,
           likes: []
         };

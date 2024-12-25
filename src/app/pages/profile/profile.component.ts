@@ -108,7 +108,6 @@ export class ProfileComponent implements OnInit {
       if (newPost) {
         const postToAdd = {
           userId: this.currentUserUid,
-          user: this.userProfile,
           ...newPost,
           likes: []
         };

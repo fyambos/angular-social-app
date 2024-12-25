@@ -127,11 +127,8 @@ export class PostService {
 
   async addReply(postId: string, replyContent: string, currentUserUid: string): Promise<void> {
     const originalPost = await this.getPostById(postId);
-    const replyPost = {
-      id: '',
+    const replyPost: any = {
       userId: currentUserUid,
-      user: await this.userService.fetchUserProfile(currentUserUid),
-      title: 'Re: ' + originalPost.title,
       content: replyContent,
       date: new Date().toISOString(),
       likes: [],

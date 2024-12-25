@@ -1,14 +1,15 @@
 <h2 mat-dialog-title>Users who liked this post</h2>
 <div mat-dialog-content>
   <ul>
-    <li *ngFor="let user of data.users">
-      <div class="flex items-center">
-        <img
+    <li *ngFor="let user of data.users" class="mb-2">
+      <div class="flex items-center space-x-3">
+        <img mat-dialog-close
           [src]="user.profilePicture"
           alt="{{ user.nickname }}"
-          class="w-8 h-8 rounded-full mr-2"
+          class="w-8 h-8 rounded-full cursor-pointer"
+          (click)="navigateToUserProfile(user.id)"
         />
-        <span>{{ user.nickname }}</span>
+        <span class="cursor-pointer" mat-dialog-close (click)="navigateToUserProfile(user.id)">{{ user.nickname }}</span>
       </div>
     </li>
   </ul>

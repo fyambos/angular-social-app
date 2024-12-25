@@ -36,4 +36,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   .like-button.liked {
     color: red;
   }
+
+  .footer-spacer {
+    height: 56px;
+    background-color: transparent;
+  }
   

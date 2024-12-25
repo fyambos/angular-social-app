@@ -30,6 +30,7 @@ import { LikesModalComponent } from './components/likes-modal/likes-modal.compon
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { MessageComponent } from './components/message/message.component';
 import { ConversationsComponent } from './pages/conversations/conversations.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { ConversationsComponent } from './pages/conversations/conversations.comp
     LikesModalComponent,
     NotFoundComponent,
     MessageComponent,
-    ConversationsComponent
+    ConversationsComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

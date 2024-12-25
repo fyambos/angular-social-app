@@ -5,11 +5,11 @@
     [post]="post"
     [currentUserUid]="currentUserUid"
   ></app-post-card>
-  <button
-    class="fixed bottom-6 right-6 bg-blue-500 text-white rounded-full p-4 shadow-lg flex items-center justify-center"
-    (click)="openNewPostDialog()"
+  <button 
+    class="fixed bottom-20 right-6 bg-blue-500 text-white rounded-full p-4 shadow-lg flex items-center justify-center z-10" 
+    (click)="openNewPostDialog()" 
     aria-label="Add New Post"
-  >
-    <mat-icon>add</mat-icon>
-  </button>
+  > 
+    <mat-icon>add</mat-icon> 
+</button>
 </div>

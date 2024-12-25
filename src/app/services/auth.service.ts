@@ -35,6 +35,8 @@ export class AuthService {
           nickname: user.email?.split('@')[0],
           bio: 'This is a default bio. Add your information here!',
           joinedDate: new Date().toISOString(),
+          profilePicture: 'assets/default-profile-picture.jpg',
+
         };
 
         const userDocRef = doc(this.firestore, `users/${user.uid}`);

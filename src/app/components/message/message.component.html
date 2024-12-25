@@ -15,6 +15,9 @@
               <h3 class="font-medium truncate">{{ conversation.nickname }}</h3>
               <p class="text-sm text-gray-500 truncate">{{ conversation.lastMessage }}</p>
             </div>
+            <div class="text-sm text-gray-400">
+              {{ conversation.lastMessageTimestamp | relativeDate }}
+            </div>
           </div>
         </li>
       </ul>
@@ -55,3 +58,4 @@
       </div>
     </div>
   </div>
+  

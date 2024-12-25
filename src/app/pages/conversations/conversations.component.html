@@ -18,7 +18,7 @@
               <h3 class="font-medium">{{ conversation.nickname }}</h3>
               <p class="text-sm text-gray-500 truncate">{{ conversation.lastMessage }}</p>
             </div>
-            <span class="text-xs text-gray-400">{{ conversation.lastMessageTimestamp }}</span>
+            <span class="text-xs text-gray-400">{{ conversation.lastMessageTimestamp | relativeDate }}</span>
           </div>
         </li>
       </ul>

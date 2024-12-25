@@ -83,7 +83,7 @@ export class MessageService {
       senderId: currentUserId,
       recipientId: recipientId,
       text: messageText,
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
     };
 
     const messageWithParticipants = {

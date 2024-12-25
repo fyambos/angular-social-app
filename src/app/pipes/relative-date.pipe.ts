@@ -36,7 +36,7 @@ export class RelativeDatePipe implements PipeTransform {
     // If it's within the last hour
     if (minutesAgo < 60) {
       if (minutesAgo < 1) return 'just now';
-      return `${minutesAgo} minute${minutesAgo === 1 ? '' : 's'} ago`;
+      return `${minutesAgo} min ago`;
     }
 
     // If it's within 24 hours

@@ -1,30 +1,46 @@
-<div class="profile-container p-6">
-  <h2 class="text-2xl font-bold mb-4">Profile Page</h2>
-  <div class="profile-section flex items-center space-x-4 mb-6">
-    <img [src]="userProfile.profilePicture" alt="Profile Picture" class="w-16 h-16 rounded-full border-2 border-gray-300">
-    <div>
-      <h3 class="text-xl font-semibold">{{ userProfile.nickname }}</h3>
-      <p class="text-sm text-gray-500">{{ userProfile.bio }}</p>
-      <p class="text-xs text-gray-400">Joined: {{ userProfile.joinedDate | date: 'short' }}</p>
+<div class="profile-container p-6"> 
+  <h2 class="text-2xl font-bold mb-4">Profile Page</h2> 
+  <div class="profile-section flex items-center justify-between mb-6"> 
+    <div class="flex items-center space-x-4"> 
+      <img  
+        [src]="userProfile.profilePicture"  
+        alt="Profile Picture"  
+        class="w-16 h-16 rounded-full border-2 border-gray-300" 
+      /> 
+      <div> 
+        <h3 class="text-xl font-semibold">{{ userProfile.nickname }}</h3> 
+        <p class="text-sm text-gray-500">{{ userProfile.bio }}</p> 
+        <p class="text-xs text-gray-400">Joined: {{ userProfile.joinedDate | date: 'short' }}</p> 
+      </div> 
     </div>
-  </div>
-  <button
-    *ngIf="isCurrentUserProfile()"
-    (click)="openEditProfileDialog()"
-    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-6"
-  >
-    Edit Profile
-  </button>
-  <app-post-card
-    *ngFor="let post of posts"
-    [post]="post"
-    [currentUserUid]="currentUserUid"
-  ></app-post-card>
-  <button
-  class="fixed bottom-6 right-6 bg-blue-500 text-white rounded-full p-4 shadow-lg flex items-center justify-center"
-  (click)="openNewPostDialog()"
-  aria-label="Add New Post"
->
-  <mat-icon>add</mat-icon>
-</button>
+    <button  
+      *ngIf="!isCurrentUserProfile()"  
+      class="flex items-center justify-center space-x-2 rounded-full text-blue-500 hover:text-blue-600 hover:bg-gray-100 transition px-1" 
+      (click)="sendMessage()" 
+      aria-label="Send Message" 
+    > 
+      <mat-icon class="text-2xl">message</mat-icon>
+    </button> 
+  </div> 
+ 
+  <button 
+    *ngIf="isCurrentUserProfile()" 
+    (click)="openEditProfileDialog()" 
+    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-6" 
+  > 
+    Edit Profile 
+  </button> 
+  <app-post-card 
+    *ngFor="let post of posts" 
+    [post]="post" 
+    [currentUserUid]="currentUserUid" 
+  ></app-post-card> 
+   
+  <button 
+    class="fixed bottom-6 right-6 bg-blue-500 text-white rounded-full p-4 shadow-lg flex items-center justify-center" 
+    (click)="openNewPostDialog()" 
+    aria-label="Add New Post" 
+  > 
+    <mat-icon>add</mat-icon> 
+  </button> 
 </div>

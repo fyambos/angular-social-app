@@ -118,4 +118,9 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
+
+  sendMessage(): void {
+    console.log('Open messaging dialog or navigate to the messaging page');
+  }
+
 }

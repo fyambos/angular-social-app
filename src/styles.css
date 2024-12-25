@@ -32,6 +32,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     justify-content: center;
     transition: color 0.3s ease;
   }
+
+  .replies-button {
+    color: rgb(210, 206, 206);
+  }
   
   .like-button.liked {
     color: red;

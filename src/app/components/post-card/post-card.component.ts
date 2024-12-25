@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { LikesModalComponent } from 'src/app/components/likes-modal/likes-modal.component';
 import { User } from 'src/app/models/user.model';
+import { NewPostDialogComponent } from 'src/app/components/new-post-dialog/new-post-dialog.component';
 
 @Component({
   selector: 'app-post-card',
@@ -84,6 +85,32 @@ export class PostCardComponent implements OnInit {
     }
   }
 
+  openEditDialog(): void {
+    const dialogRef = this.dialog.open(NewPostDialogComponent, {
+      data: { post: this.post },
+    });
+
+    dialogRef.afterClosed().subscribe((updatedPost) => {
+      if (updatedPost) {
+        this.postService.updatePost(updatedPost).then(() => {
+        }).catch((error) => {
+          console.error('Error updating post:', error);
+        });
+      }
+    });
+  }
+
+  deletePost(): void {
+    if (confirm('Are you sure you want to delete this post?')) {
+      this.postService.deletePost(this.post.id)
+        .then(() => {
+          console.log('Post deleted successfully');
+        })
+        .catch(error => {
+          console.error('Error deleting post:', error);
+        });
+    }
+  }
 
   private subscribeToRepliesCount(): void {
     this.repliesCountSubscription = this.postService

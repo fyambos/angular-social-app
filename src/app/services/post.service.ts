@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, getDocs, query, where, updateDoc, doc, arrayRemove, arrayUnion, onSnapshot, getDoc, orderBy } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, getDocs, query, where, updateDoc, doc, arrayRemove, arrayUnion, onSnapshot, getDoc, orderBy, deleteDoc } from '@angular/fire/firestore';
 import { Post } from 'src/app/models/post.model';
 import { UserService } from './user.service';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -269,4 +269,30 @@ export class PostService {
       };
     });
   }
+
+  deletePost(postId: string): Promise<void> {
+    const postRef = doc(this.firestore, `posts/${postId}`);
+    return deleteDoc(postRef)
+      .then(() => {
+        console.log('Post deleted successfully');
+      })
+      .catch((error) => {
+        console.error('Error deleting post:', error);
+        throw error;
+      });
+  }
+
+  async updatePost(updatedPost: Post): Promise<void> {
+    const postRef = doc(this.firestore, `posts/${updatedPost.id}`);
+    try {
+      await updateDoc(postRef, {
+        title: updatedPost.title,
+        content: updatedPost.content,
+      });
+    } catch (error) {
+      console.error('Error updating post:', error);
+      throw new Error('Error updating post');
+    }
+  }
+
 }

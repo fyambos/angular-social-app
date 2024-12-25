@@ -1,4 +1,4 @@
-<div class="post-card bg-white p-4 mb-4 rounded shadow-md cursor-pointer" (click)="navigateToPostView()">
+<div class="post-card bg-white p-4 mb-4 rounded shadow-md cursor-pointer relative" (click)="navigateToPostView()">
   <div class="flex items-center mb-3">
     <img
       [src]="post.user.profilePicture"
@@ -16,10 +16,22 @@
       <span class="text-sm text-gray-500">{{ post.date | relativeDate }}</span>
     </div>
   </div>
-  <div class="">
+
+  <!-- Edit and Delete Icons at the Top Right -->
+  <div *ngIf="post.user.id === currentUserUid" class="absolute top-2 right-2 flex space-x-4">
+    <button (click)="openEditDialog()" class="text-gray-500 hover:text-blue-500">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button (click)="deletePost()" class="text-gray-500 hover:text-red-500">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+
+  <div>
     <h2 class="text-xl font-bold mb-2">{{ post.title }}</h2>
     <p class="text-gray-700">{{ post.content }}</p>
   </div>
+
   <div class="flex items-center justify-between mt-3">
     <button
       (click)="toggleReplyInput()"
@@ -38,19 +50,20 @@
           <mat-icon>favorite</mat-icon>
         </button>
         <span
-        class="text-gray-700 ml-2 cursor-pointer"
-        (click)="openLikesModal()">
+          class="text-gray-700 ml-2 cursor-pointer"
+          (click)="openLikesModal()">
           {{ post.likes.length === 0 ? '' : post.likes.length }}
         </span>
       </div>
       <div class="flex items-center cursor-pointer" (click)="navigateToPostView()">
-        <mat-icon>chat_bubble</mat-icon>
-        <span class="text-gray-700 ml-2">
+        <mat-icon class="replies-button">chat_bubble</mat-icon>
+        <span class="ml-2">
           {{ repliesCount === 0 ? '' : repliesCount }}
         </span>
       </div>
     </div>
   </div>
+
   <div class="mt-4">
     <div *ngIf="showReplyInput" class="mt-2">
       <textarea

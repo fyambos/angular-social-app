@@ -34,7 +34,6 @@ export class AuthService {
         const userProfile = {
           nickname: user.email?.split('@')[0],
           bio: 'This is a default bio. Add your information here!',
-          profilePicture: 'assets/default-profile-picture.jpg',
           joinedDate: new Date().toISOString(),
         };
 

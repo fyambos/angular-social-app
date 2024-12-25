@@ -10,8 +10,15 @@ export class EditProfileDialogComponent {
     public dialogRef: MatDialogRef<EditProfileDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
-
+  ngOnInit(): void {
+    if (this.data.profilePicture === 'assets/default-profile-picture.jpg') {
+      this.data.profilePicture = '';
+    }
+  }
   onSave(): void {
+    if (this.data.profilePicture === '') {
+      this.data.profilePicture = 'assets/default-profile-picture.jpg';
+    }
     this.dialogRef.close(this.data);
   }
 

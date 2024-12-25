@@ -1,4 +1,4 @@
-<div class="post-card bg-white p-4 mb-4 rounded shadow-md">
+<div class="post-card bg-white p-4 mb-4 rounded shadow-md cursor-pointer" (click)="navigateToPostView()">
   <div class="flex items-center mb-3">
     <img
       [src]="post.user.profilePicture"
@@ -16,7 +16,7 @@
       <span class="text-sm text-gray-500">{{ post.date | relativeDate }}</span>
     </div>
   </div>
-  <div class="cursor-pointer" (click)="navigateToPostView()">
+  <div class="">
     <h2 class="text-xl font-bold mb-2">{{ post.title }}</h2>
     <p class="text-gray-700">{{ post.content }}</p>
   </div>
@@ -44,9 +44,9 @@
         </span>
       </div>
       <div class="flex items-center cursor-pointer" (click)="navigateToPostView()">
-        <mat-icon>chat_bubble_outline</mat-icon>
+        <mat-icon>chat_bubble</mat-icon>
         <span class="text-gray-700 ml-2">
-          {{ repliesCount }}
+          {{ repliesCount === 0 ? '' : repliesCount }}
         </span>
       </div>
     </div>

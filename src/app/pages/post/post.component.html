@@ -8,14 +8,16 @@
       ></app-post-card>
     </div>
   </ng-container>
+  
   <app-post-card
     *ngIf="post"
     [post]="post"
     [currentUserUid]="currentUserUid"
   ></app-post-card>
-  <div class="replies mt-6">
-    <h3>Replies:</h3>
-    <div *ngFor="let reply of replies" class="mt-2">
+  
+  <div *ngIf="replies.length > 0" class="replies mt-6">
+    <h3 class="text-xl font-semibold text-gray-800 border-b-2 pb-2">Replies</h3>
+    <div *ngFor="let reply of replies" class="mt-2 pt-8">
       <app-post-card
         [post]="reply"
         [currentUserUid]="currentUserUid"

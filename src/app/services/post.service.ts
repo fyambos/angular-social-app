@@ -120,6 +120,7 @@ export class PostService {
         content: postData['content'],
         date: postData['date'],
         likes: postData['likes'] || [],
+        replyToPostId: postData['replyToPostId'] || null,
       };
     } else {
       throw new Error('Post not found');

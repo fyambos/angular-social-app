@@ -1,17 +1,25 @@
 <div class="container mx-auto p-4">
-    <app-post-card
-      *ngIf="post"
-      [post]="post"
-      [currentUserUid]="currentUserUid"
-    ></app-post-card>
-    <div class="replies">
-      <h3>Replies:</h3>
-      <div *ngFor="let reply of replies">
-        <app-post-card
+  <ng-container *ngIf="parentPost">
+    <div class="mb-4 border border-gray-300 rounded p-4 bg-gray-50">
+      <h4 class="text-gray-500 text-sm">In reply to:</h4>
+      <app-post-card
+        [post]="parentPost"
+        [currentUserUid]="currentUserUid"
+      ></app-post-card>
+    </div>
+  </ng-container>
+  <app-post-card
+    *ngIf="post"
+    [post]="post"
+    [currentUserUid]="currentUserUid"
+  ></app-post-card>
+  <div class="replies mt-6">
+    <h3>Replies:</h3>
+    <div *ngFor="let reply of replies" class="mt-2">
+      <app-post-card
         [post]="reply"
         [currentUserUid]="currentUserUid"
       ></app-post-card>
-      </div>
     </div>
+  </div>
 </div>
-  

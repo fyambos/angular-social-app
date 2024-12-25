@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 })
 export class PostComponent implements OnInit, OnDestroy {
   post!: Post;
+  parentPost!: Post | null;
   currentUserUid: string = '';
   replies: Post[] = [];
   private routeSubscription!: Subscription;
@@ -29,6 +30,7 @@ export class PostComponent implements OnInit, OnDestroy {
         this.postService.getPostById(postId).then(post => {
           this.post = post;
           this.loadReplies();
+          this.loadParentPost();
         });
       }
     });
@@ -63,4 +65,19 @@ export class PostComponent implements OnInit, OnDestroy {
     }
   }
   
+  private async loadParentPost(): Promise<void> {
+    
+    console.log('Loading parent post:', this.post.replyToPostId);
+    console.log('Post:', this.post);
+    if (this.post.replyToPostId) {
+      try {
+        this.parentPost = await this.postService.getPostById(this.post.replyToPostId);
+      } catch (error) {
+        console.error('Error loading parent post:', error);
+        this.parentPost = null;
+      }
+    } else {
+      this.parentPost = null;
+    }
+  }
 }

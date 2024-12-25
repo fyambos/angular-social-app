@@ -8,6 +8,7 @@ import { NewPostDialogComponent } from 'src/app/components/new-post-dialog/new-p
 import { User } from 'src/app/models/user.model';
 import { Post } from 'src/app/models/post.model';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -30,7 +31,8 @@ export class ProfileComponent implements OnInit {
     private userService: UserService,
     private postService: PostService,
     private auth: Auth,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -120,7 +122,7 @@ export class ProfileComponent implements OnInit {
   }
 
   sendMessage(): void {
-    console.log('Open messaging dialog or navigate to the messaging page');
+    this.router.navigate(['/messages', this.displayedUserUid]);
   }
 
 }

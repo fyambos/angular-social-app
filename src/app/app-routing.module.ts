@@ -8,6 +8,7 @@ import { authGuard } from './guards/auth.guard';
 import { noAuthGuard } from './guards/no-auth.guard';
 import { PostComponent } from './pages/post/post.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { MessageComponent } from './components/message/message.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [authGuard] },
   { path: 'profile/:uid', component: ProfileComponent },
   { path: 'post/:uid', component: PostComponent },
+  { path: 'messages/:recipientId', component: MessageComponent, canActivate: [authGuard] },
   { path: '**', component: NotFoundComponent },
 
 ];

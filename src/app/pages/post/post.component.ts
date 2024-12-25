@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './post.component.html',
 })
 export class PostComponent implements OnInit, OnDestroy {
-  post!: Post;
+  post!: Post | null;
   parentPost!: Post | null;
   currentUserUid: string = '';
   replies: Post[] = [];
@@ -57,10 +57,15 @@ ngOnDestroy(): void {
       const post = await this.postService.getPostById(postId);
       this.post = post;
     } catch (error) {
-      console.error('Error loading post:', error);
+      if (error instanceof Error && error.message === 'Post not found') {
+        this.post = null;
+      } else {
+        this.post = null;
+      }
     }
   }
-
+  
+  
   loadReplies(): void {
     if (this.post) {
       this.postService.getReplies(this.post.id).then(replies => {
@@ -70,7 +75,7 @@ ngOnDestroy(): void {
   }
   
   private async loadParentPost(): Promise<void> {
-    if (this.post.replyToPostId) {
+    if (this.post?.replyToPostId) {
       try {
         this.parentPost = await this.postService.getPostById(this.post.replyToPostId);
       } catch (error) {

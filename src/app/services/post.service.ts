@@ -106,7 +106,7 @@ export class PostService {
     });
   }
 
-  async getPostById(postId: string): Promise<Post> {
+  async getPostById(postId: string): Promise<any> {
     const postDocRef = doc(this.firestore, `posts/${postId}`);
     const postDocSnap = await getDoc(postDocRef);
   
@@ -123,7 +123,7 @@ export class PostService {
         replyToPostId: postData['replyToPostId'] || null,
       };
     } else {
-      throw new Error('Post not found');
+      return null;
     }
   }
 

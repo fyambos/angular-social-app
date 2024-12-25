@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Post } from 'src/app/models/post.model';
 import { PostService } from 'src/app/services/post.service';
 import { Router } from '@angular/router';
@@ -7,21 +7,26 @@ import { Router } from '@angular/router';
   selector: 'app-post-card',
   templateUrl: './post-card.component.html',
 })
-export class PostCardComponent {
+export class PostCardComponent implements OnInit {
   @Input() post!: Post;
   @Input() currentUserUid: string = '';
   replyContent: string = '';
   showReplyInput: boolean = false;
+  repliesCount: number = 0;
 
   constructor(
     private postService: PostService,
     private router: Router,
   ) {}
 
+  ngOnInit(): void {
+    this.loadRepliesCount();
+  }
+
   get isLikedByCurrentUser(): boolean {
     return this.post.likes?.includes(this.currentUserUid) ?? false;
   }
-  
+
   toggleLike(): void {
     if (!this.post || !this.currentUserUid) return;
 
@@ -66,10 +71,19 @@ export class PostCardComponent {
         .then(() => {
           this.replyContent = '';
           this.showReplyInput = false;
+          this.loadRepliesCount();
         })
         .catch(error => {
           console.error('Error saving reply:', error);
         });
     }
+  }
+
+  private loadRepliesCount(): void {
+    this.postService.getRepliesCount(this.post.id).then(count => {
+      this.repliesCount = count;
+    }).catch(error => {
+      console.error('Error loading replies count:', error);
+    });
   }
 }

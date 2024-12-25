@@ -165,4 +165,11 @@ export class PostService {
     return replies;
   }
 
+  async getRepliesCount(postId: string): Promise<number> {
+    const repliesCollection = collection(this.firestore, 'posts');
+    const repliesQuery = query(repliesCollection, where('replyToPostId', '==', postId));
+    const snapshot = await getDocs(repliesQuery);
+    return snapshot.size;
+  }
+
 }

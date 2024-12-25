@@ -4,12 +4,14 @@ import { Post } from 'src/app/models/post.model';
 import { UserService } from './user.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { User } from 'src/app/models/user.model';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
   private posts$ = new BehaviorSubject<Post[]>([]);
+  private repliesMap = new Map<string, BehaviorSubject<Post[]>>();
 
   constructor(
     private firestore: Firestore,
@@ -167,11 +169,10 @@ export class PostService {
     return replies;
   }
 
-  async getRepliesCount(postId: string): Promise<number> {
-    const repliesCollection = collection(this.firestore, 'posts');
-    const repliesQuery = query(repliesCollection, where('replyToPostId', '==', postId));
-    const snapshot = await getDocs(repliesQuery);
-    return snapshot.size;
+  getRepliesCount(postId: string): Observable<number> {
+    return this.getRepliesObservable(postId).pipe(
+      map(replies => replies.length)
+    );
   }
 
   async getUsersWhoLiked(postId: string): Promise<User[]> {
@@ -192,6 +193,40 @@ export class PostService {
     } else {
       throw new Error('Post not found');
     }
+  }
+
+  getRepliesObservable(postId: string): Observable<Post[]> {
+    if (!this.repliesMap.has(postId)) {
+      this.repliesMap.set(postId, new BehaviorSubject<Post[]>([]));
+      this.initializeRepliesListener(postId);
+    }
+    return this.repliesMap.get(postId)!.asObservable();
+  }
+
+  private initializeRepliesListener(postId: string): void {
+    const postsCollection = collection(this.firestore, 'posts');
+    const repliesQuery = query(postsCollection, where('replyToPostId', '==', postId));
+
+    onSnapshot(repliesQuery, async (snapshot) => {
+      const replies: Post[] = await Promise.all(
+        snapshot.docs.map(async (doc) => {
+          const replyData = doc.data();
+          const user = await this.userService.fetchUserProfile(replyData['userId']);
+          return {
+            user,
+            id: doc.id,
+            title: replyData['title'],
+            content: replyData['content'],
+            date: replyData['date'],
+            likes: replyData['likes'] || [],
+            replyToPostId: replyData['replyToPostId']
+          } as Post;
+        })
+      );
+      
+      replies.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      this.repliesMap.get(postId)?.next(replies);
+    });
   }
   
   

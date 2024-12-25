@@ -15,6 +15,7 @@ export class PostComponent implements OnInit, OnDestroy {
   currentUserUid: string = '';
   replies: Post[] = [];
   private routeSubscription!: Subscription;
+  private repliesSubscription?: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,7 +30,7 @@ export class PostComponent implements OnInit, OnDestroy {
         this.loadPost(postId);
         this.postService.getPostById(postId).then(post => {
           this.post = post;
-          this.loadReplies();
+          this.subscribeToReplies();
           this.loadParentPost();
         });
       }
@@ -42,9 +43,12 @@ export class PostComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
+ngOnDestroy(): void {
     if (this.routeSubscription) {
       this.routeSubscription.unsubscribe();
+    }
+    if (this.repliesSubscription) {
+      this.repliesSubscription.unsubscribe();
     }
   }
 
@@ -66,9 +70,6 @@ export class PostComponent implements OnInit, OnDestroy {
   }
   
   private async loadParentPost(): Promise<void> {
-    
-    console.log('Loading parent post:', this.post.replyToPostId);
-    console.log('Post:', this.post);
     if (this.post.replyToPostId) {
       try {
         this.parentPost = await this.postService.getPostById(this.post.replyToPostId);
@@ -80,4 +81,15 @@ export class PostComponent implements OnInit, OnDestroy {
       this.parentPost = null;
     }
   }
+
+  private subscribeToReplies(): void {
+    if (this.post) {
+      this.repliesSubscription = this.postService
+        .getRepliesObservable(this.post.id)
+        .subscribe(replies => {
+          this.replies = replies;
+        });
+    }
+  }
+  
 }

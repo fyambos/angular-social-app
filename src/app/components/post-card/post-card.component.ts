@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Post } from 'src/app/models/post.model';
 import { PostService } from 'src/app/services/post.service';
 import { Router } from '@angular/router';
@@ -16,6 +17,7 @@ export class PostCardComponent implements OnInit {
   replyContent: string = '';
   showReplyInput: boolean = false;
   repliesCount: number = 0;
+  private repliesCountSubscription?: Subscription;
 
   constructor(
     private postService: PostService,
@@ -24,7 +26,7 @@ export class PostCardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadRepliesCount();
+    this.subscribeToRepliesCount();
   }
 
   get isLikedByCurrentUser(): boolean {
@@ -75,7 +77,6 @@ export class PostCardComponent implements OnInit {
         .then(() => {
           this.replyContent = '';
           this.showReplyInput = false;
-          this.loadRepliesCount();
         })
         .catch(error => {
           console.error('Error saving reply:', error);
@@ -83,12 +84,13 @@ export class PostCardComponent implements OnInit {
     }
   }
 
-  private loadRepliesCount(): void {
-    this.postService.getRepliesCount(this.post.id).then(count => {
-      this.repliesCount = count;
-    }).catch(error => {
-      console.error('Error loading replies count:', error);
-    });
+
+  private subscribeToRepliesCount(): void {
+    this.repliesCountSubscription = this.postService
+      .getRepliesCount(this.post.id)
+      .subscribe(count => {
+        this.repliesCount = count;
+      });
   }
 
   openLikesModal(): void {
@@ -100,5 +102,11 @@ export class PostCardComponent implements OnInit {
     }).catch(error => {
       console.error('Error fetching likes:', error);
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.repliesCountSubscription) {
+      this.repliesCountSubscription.unsubscribe();
+    }
   }
 }

@@ -10,6 +10,7 @@ import { PostComponent } from './pages/post/post.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { MessageComponent } from './components/message/message.component';
 import { ConversationsComponent } from './pages/conversations/conversations.component';
+import { SearchComponent } from './pages/search/search.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'post/:uid', component: PostComponent },
   { path: 'messages/:recipientId', component: MessageComponent, canActivate: [authGuard] },
   { path: 'messages', component: ConversationsComponent, canActivate: [authGuard] },
+  { path: 'search', component: SearchComponent },
   { path: '**', component: NotFoundComponent },
 
 ];

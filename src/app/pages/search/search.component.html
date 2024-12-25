@@ -1,0 +1,63 @@
+<div class="search-container p-4">
+    <h1 class="text-2xl font-semibold mb-4">Search</h1>
+    <div class="flex justify-center mb-4">
+      <button
+        (click)="toggleTab('posts')"
+        [ngClass]="{'bg-blue-500 text-white': selectedTab === 'posts', 'bg-gray-200 text-gray-600': selectedTab !== 'posts'}"
+        class="px-6 py-2 rounded-l-lg"
+      >
+        Posts
+      </button>
+      <button
+        (click)="toggleTab('users')"
+        [ngClass]="{'bg-blue-500 text-white': selectedTab === 'users', 'bg-gray-200 text-gray-600': selectedTab !== 'users'}"
+        class="px-6 py-2 rounded-r-lg"
+      >
+        Users
+      </button>
+    </div>
+    <input
+      type="text"
+      [(ngModel)]="query"
+      (ngModelChange)="onSearch()"
+      placeholder="Search for posts or users..."
+      class="w-full p-2 border border-gray-300 rounded-lg mb-4"
+    />
+    <div *ngIf="loading" class="text-center">Loading...</div>
+    <div *ngIf="selectedTab === 'posts'">
+      <div *ngIf="results.length > 0">
+        <h2 class="text-lg font-medium mb-4">Posts:</h2>
+        <app-post-card 
+            *ngFor="let post of results" 
+            [post]="post" 
+            [currentUserUid]="currentUserUid" 
+        ></app-post-card> 
+      </div>
+  
+      <div *ngIf="results.length === 0 && !loading">
+        <p>No posts found</p>
+      </div>
+    </div>
+    <div *ngIf="selectedTab === 'users'">
+      <div *ngIf="users.length > 0">
+        <h2 class="text-lg font-medium mb-4">Users:</h2>
+        <div *ngFor="let user of users" class="user-item mb-4 flex items-center">
+          <img
+            *ngIf="user.profilePicture"
+            [src]="user.profilePicture"
+            alt="Profile Picture"
+            class="w-12 h-12 rounded-full mr-4"
+          />
+          <div>
+            <h3 class="font-semibold">{{ user.nickname }}</h3>
+            <p>{{ user.bio }}</p>
+            <a [routerLink]="['/profile', user.id]" class="text-blue-500">View Profile</a>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="users.length === 0 && !loading">
+        <p>No users found</p>
+      </div>
+    </div>
+  </div>
+  

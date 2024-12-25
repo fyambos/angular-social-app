@@ -8,6 +8,8 @@
 - **Affichage des posts**: Affichage des posts des utilisateurs avec leur photo de profil et leurs détails.
 - **Modération de profil**: Édition du profil utilisateur (nickname, bio, photo de profil).
 - **Firebase Firestore**: Sauvegarde et récupération des données des utilisateurs et des posts à partir de Firestore.
+- **Messages et conversations**: Implémentation d'une fonctionnalité de messagerie avec affichage des conversations et envoi de messages en temps réel.
+- **Recherche**: Page de recherche pour rechercher des posts ou des utilisateurs.
 
 ## 📂 Structure du projet
 
@@ -16,7 +18,7 @@ src/
 ├── app/
 │   ├── components/               # Composants Angular (dialogs, etc.)
 │   ├── models/                   # Modèles (User, Post, etc.)
-│   ├── services/                 # Services Angular (auth, user, post)
+│   ├── services/                 # Services Angular (auth, user, post, message)
 │   ├── pages/                    # Pages principales (Home, Profile, etc.)
 │   ├── app.module.ts             # Module principal d'Angular
 │   ├── app-routing.module.ts     # Configuration des routes
@@ -80,6 +82,22 @@ src/
 - **Firebase**: Utilisé pour l'authentification des utilisateurs et la gestion des bases de données (Firestore).
 - **Angular Material**: Composants UI pour une meilleure expérience utilisateur.
 - **TailwindCSS**: Utilisé pour le style et la mise en page réactive.
+- **Font Awesome**: Pour les icônes de navigation (Accueil, Recherche, Messages).
+- **Custom Date Pipe**: Utilisé pour formater les dates et afficher des dates relatives pour les posts.
+
+## ✨ Fonctionnalités Récentes
+### 💬 Messages et Conversations
+- **Conversations**: La page des conversations a été ajoutée, permettant aux utilisateurs de voir et de discuter avec leurs contacts.
+- **Footer avec icônes de navigation**: Un footer fixe a été ajouté avec des icônes de navigation. L'icône devient bleue lorsqu'elle est active.
+- **Recherche**: Fonctionalité de recherche permettant de rechercher des posts ou des utilisateurs.
+
+### 📅 Gestion des Posts
+- **Réponses aux posts**: Les utilisateurs peuvent répondre aux posts et voir les réponses immédiatement grâce à la fonctionnalité en temps réel.
+- **Affichage des posts**: Affichage des posts et des réponses sur les pages de profil et d'accueil, avec des icônes et un bouton pour aimer et commenter.
+
+### 🔄 Améliorations
+- **Redirection et Auth Guard**: Le projet a été mis à jour pour gérer la redirection après la connexion et sécuriser les routes avec un auth guard.
+- **Page 404**: Une page 404 a été ajoutée pour gérer les routes inexistantes.
 
 ## 📜 Licence
 

@@ -31,6 +31,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { MessageComponent } from './components/message/message.component';
 import { ConversationsComponent } from './pages/conversations/conversations.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { SearchComponent } from './pages/search/search.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { FooterComponent } from './components/footer/footer.component';
     MessageComponent,
     ConversationsComponent,
     FooterComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, getDocs, query, where, updateDoc, doc, arrayRemove, arrayUnion, onSnapshot, getDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, getDocs, query, where, updateDoc, doc, arrayRemove, arrayUnion, onSnapshot, getDoc, orderBy } from '@angular/fire/firestore';
 import { Post } from 'src/app/models/post.model';
 import { UserService } from './user.service';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -49,8 +49,6 @@ export class PostService {
       this.posts$.next(postsList);
     });
   }
-  
-  
 
   async addPost(newPost: Post): Promise<void> {
     try {
@@ -228,6 +226,47 @@ export class PostService {
       this.repliesMap.get(postId)?.next(replies);
     });
   }
-  
-  
+
+
+  searchPosts(searchQuery: string): Observable<any[]> {
+    const postsCollection = collection(this.firestore, 'posts');
+    const titleQuery = query(
+      postsCollection,
+      where('title', '>=', searchQuery),
+      where('title', '<=', searchQuery + '\uf8ff'),
+      orderBy('title')
+    );
+    const contentQuery = query(
+      postsCollection,
+      where('content', '>=', searchQuery),
+      where('content', '<=', searchQuery + '\uf8ff'),
+      orderBy('content')
+    );
+    return new Observable<any[]>((observer) => {
+      const unsubscribePosts = onSnapshot(titleQuery, async (snapshot) => {
+        const postsList = await Promise.all(snapshot.docs.map(async (doc) => {
+          const postData = doc.data();
+          const userId = postData['userId'];
+          const userProfile = await this.userService.fetchUserProfile(userId);
+          return { id: doc.id, ...postData, user: userProfile };
+        }));
+        observer.next(postsList);
+      });
+
+      const unsubscribeContent = onSnapshot(contentQuery, async (snapshot) => {
+        const contentList = await Promise.all(snapshot.docs.map(async (doc) => {
+          const postData = doc.data();
+          const userId = postData['userId'];
+          const userProfile = await this.userService.fetchUserProfile(userId);  // Fetch user profile using UserService
+          return { id: doc.id, ...postData, user: userProfile };
+        }));
+        observer.next(contentList);
+      });
+
+      return () => {
+        unsubscribePosts();
+        unsubscribeContent();
+      };
+    });
+  }
 }

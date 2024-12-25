@@ -19,10 +19,10 @@
 
   <!-- Edit and Delete Icons at the Top Right -->
   <div *ngIf="post.user.id === currentUserUid" class="absolute top-2 right-2 flex space-x-4">
-    <button (click)="openEditDialog()" class="text-gray-500 hover:text-blue-500">
+    <button (click)="openEditDialog()" class="text-gray-500 hover:text-blue-500" (click)="$event.stopPropagation()">
       <mat-icon>edit</mat-icon>
     </button>
-    <button (click)="deletePost()" class="text-gray-500 hover:text-red-500">
+    <button (click)="deletePost()" class="text-gray-500 hover:text-red-500" (click)="$event.stopPropagation()">
       <mat-icon>delete</mat-icon>
     </button>
   </div>
@@ -36,6 +36,7 @@
     <button
       (click)="toggleReplyInput()"
       class="text-blue-500"
+      (click)="$event.stopPropagation()"
     >
       Reply
     </button>
@@ -44,18 +45,19 @@
         <button
           class="like-button"
           [class.liked]="isLikedByCurrentUser"
-          (click)="toggleLike()"
+          (click)="toggleLike(); $event.stopPropagation()"
           aria-label="Toggle like"
         >
           <mat-icon>favorite</mat-icon>
         </button>
         <span
           class="text-gray-700 ml-2 cursor-pointer"
-          (click)="openLikesModal()">
+          (click)="openLikesModal(); $event.stopPropagation()"
+        >
           {{ post.likes.length === 0 ? '' : post.likes.length }}
         </span>
       </div>
-      <div class="flex items-center cursor-pointer" (click)="navigateToPostView()">
+      <div class="flex items-center cursor-pointer" (click)="navigateToPostView(); $event.stopPropagation()">
         <mat-icon class="replies-button">chat_bubble</mat-icon>
         <span class="ml-2">
           {{ repliesCount === 0 ? '' : repliesCount }}

@@ -32,6 +32,7 @@ export class MessageService {
             conversationsMap.set(otherUserId, {
               recipientId: otherUserId,
               nickname: '',
+              profilePicture: '',
               lastMessage: message.text,
               lastMessageTimestamp: message.timestamp
             });
@@ -41,7 +42,12 @@ export class MessageService {
         const conversations = Array.from(conversationsMap.values());
         for (const conversation of conversations) {
           const userDoc = await getDoc(doc(this.firestore, 'users', conversation.recipientId));
-          conversation.nickname = userDoc.data()?.['nickname'] || 'Unknown User';
+          const userData = userDoc.data();
+          
+          if (userData) {
+            conversation.nickname = userData['nickname'] || 'Unknown User';
+            conversation.profilePicture = userData['profilePicture'] || '';
+          }
         }
 
         subscriber.next(conversations);

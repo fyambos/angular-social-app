@@ -4,6 +4,7 @@ import { Auth } from '@angular/fire/auth';
 import { MessageService } from 'src/app/services/message.service';
 import { onAuthStateChanged } from 'firebase/auth';
 import { UserService } from 'src/app/services/user.service';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-message',
@@ -11,7 +12,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class MessageComponent implements OnInit {
   recipientId: string = '';
-  recipientNickname: string = '';
+  recipient: any = {};
   conversations: any[] = [];
   messages: any[] = [];
   currentUserId: string = '';
@@ -35,19 +36,19 @@ export class MessageComponent implements OnInit {
 
     this.route.paramMap.subscribe((params) => {
       this.recipientId = params.get('recipientId') || '';
-      this.loadRecipientNickname(); 
+      this.loadRecipient(); 
     });
   }
 
-  loadRecipientNickname(): void {
+  loadRecipient(): void {
     if (this.recipientId) {
       this.userService.fetchUserProfile(this.recipientId).then(
         (userData) => {
-          this.recipientNickname = userData.nickname;
+          this.recipient = userData;
         }
       ).catch(
         (error) => {
-          console.error('Error loading recipient nickname:', error);
+          console.error('Error loading recipient:', error);
         }
       );
     }

@@ -3,4 +3,5 @@ export interface Conversation {
   nickname: string;
   lastMessage: string;
   lastMessageTimestamp: Date;
+  profilePicture: string;
 }

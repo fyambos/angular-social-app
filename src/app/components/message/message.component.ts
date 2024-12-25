@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
 import { MessageService } from 'src/app/services/message.service';
 import { onAuthStateChanged } from 'firebase/auth';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-message',
@@ -19,7 +20,8 @@ export class MessageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private messageService: MessageService,
-    private auth: Auth
+    private auth: Auth,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
@@ -38,7 +40,17 @@ export class MessageComponent implements OnInit {
   }
 
   loadRecipientNickname(): void {
-    this.recipientNickname = 'Recipient Name';
+    if (this.recipientId) {
+      this.userService.fetchUserProfile(this.recipientId).then(
+        (userData) => {
+          this.recipientNickname = userData.nickname;
+        }
+      ).catch(
+        (error) => {
+          console.error('Error loading recipient nickname:', error);
+        }
+      );
+    }
   }
 
   loadMessages(): void {
@@ -65,10 +77,10 @@ export class MessageComponent implements OnInit {
     if (this.newMessage.trim() && this.currentUserId && this.recipientId) {
       this.messageService
         .sendMessage(this.currentUserId, this.recipientId, this.newMessage.trim())
-        .subscribe((newMessage) => {
-          this.messages.push(newMessage);
+        .then(() => {
           this.newMessage = '';
-        });
+        })
+        .catch(error => console.error('Error sending message:', error));
     }
   }
 }

@@ -30,7 +30,19 @@
   > 
     Edit Profile 
   </button> 
-  <div class="flex items-center space-x-4">
+  <div class="profile-follow-section flex items-center space-x-6 mb-6">
+    <button 
+      class=""
+      (click)="showFollowers()"
+    >
+      {{ userProfile.followers?.length || 0 }} Followers
+    </button>
+    <button 
+      class=""
+      (click)="showFollowing()"
+    >
+      {{ userProfile.following?.length || 0 }} Following
+    </button>
     <button 
       *ngIf="!isCurrentUserProfile() && !isFollowing" 
       class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"

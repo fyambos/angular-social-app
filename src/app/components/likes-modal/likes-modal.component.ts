@@ -8,10 +8,14 @@ import { Router } from '@angular/router';
   templateUrl: './likes-modal.component.html',
 })
 export class LikesModalComponent {
+  title: string;
+
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { users: User[] },
+    @Inject(MAT_DIALOG_DATA) public data: { users: User[]; title: string },
     private router: Router,
-  ) {}
+  ) {
+    this.title = data.title;
+  }
 
   navigateToUserProfile(userId: string): void {
     this.router.navigate([`/profile/${userId}`]);

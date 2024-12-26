@@ -124,7 +124,10 @@ export class PostCardComponent implements OnInit {
     this.postService.getUsersWhoLiked(this.post.id).then((users: User[]) => {
       this.dialog.open(LikesModalComponent, {
         width: '400px',
-        data: { users },
+        data: { 
+          users,
+          title: 'Users who liked this post',
+        },
       });
     }).catch(error => {
       console.error('Error fetching likes:', error);

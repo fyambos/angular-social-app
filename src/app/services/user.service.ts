@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, doc, getDoc, updateDoc, collection, query, where, orderBy, getDocs } from '@angular/fire/firestore';
+import { Firestore, doc, getDoc, updateDoc, collection, query, where, orderBy, getDocs, arrayRemove, arrayUnion } from '@angular/fire/firestore';
 import { Auth, User, onAuthStateChanged } from '@angular/fire/auth';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { User as UserProfile } from '../models/user.model';
@@ -31,6 +31,8 @@ export class UserService {
           profilePicture: userData['profilePicture'] || 'assets/default-profile-picture.jpg',
           bio: userData['bio'] || '',
           joinedDate: userData['joinedDate'] || '',
+          followers: userData['followers'] || [],
+          following: userData['following'] || [],
         } as UserProfile;
       } else {
         console.error(`User profile not found for uid: ${uid}, document path: users/${uid}`);
@@ -62,4 +64,57 @@ export class UserService {
       });
     });
   }
+
+  followUser(currentUserId: string, targetUserId: string): Promise<void> {
+    const currentUserRef = doc(this.firestore, `users/${currentUserId}`);
+    const targetUserRef = doc(this.firestore, `users/${targetUserId}`);
+    
+    return Promise.all([
+      updateDoc(currentUserRef, {
+        following: arrayUnion(targetUserId),
+      }),
+      updateDoc(targetUserRef, {
+        followers: arrayUnion(currentUserId),
+      }),
+    ]).then(() => console.log('Followed user successfully.'));
+  }
+  
+  unfollowUser(currentUserId: string, targetUserId: string): Promise<void> {
+    const currentUserRef = doc(this.firestore, `users/${currentUserId}`);
+    const targetUserRef = doc(this.firestore, `users/${targetUserId}`);
+    
+    return Promise.all([
+      updateDoc(currentUserRef, {
+        following: arrayRemove(targetUserId),
+      }),
+      updateDoc(targetUserRef, {
+        followers: arrayRemove(currentUserId),
+      }),
+    ]).then(() => console.log('Unfollowed user successfully.'));
+  }
+  
+  getFollowers(uid: string): Promise<UserProfile[]> {
+    const userDocRef = doc(this.firestore, `users/${uid}`);
+    return getDoc(userDocRef).then(async (docSnap) => {
+      const data = docSnap.data();
+      if (data && data['followers']) {
+        const followers = data['followers'] as string[];
+        return Promise.all(followers.map((followerId) => this.fetchUserProfile(followerId)));
+      }
+      return [];
+    });
+  }
+  
+  getFollowing(uid: string): Promise<UserProfile[]> {
+    const userDocRef = doc(this.firestore, `users/${uid}`);
+    return getDoc(userDocRef).then(async (docSnap) => {
+      const data = docSnap.data();
+      if (data && data['following']) {
+        const following = data['following'] as string[];
+        return Promise.all(following.map((followingId) => this.fetchUserProfile(followingId)));
+      }
+      return [];
+    });
+  }
+
 }

@@ -20,11 +20,14 @@ export class ProfileComponent implements OnInit {
     nickname: '',
     bio: '',
     profilePicture: 'assets/default-profile-picture.jpg',
-    joinedDate: ''
+    joinedDate: '',
+    followers: [],
+    following: []
   };
   posts: Post[] = [];
   currentUserUid: string = '';
   displayedUserUid: string = '';
+  isFollowing: boolean = false;
 
   constructor(
     public dialog: MatDialog,
@@ -41,6 +44,7 @@ export class ProfileComponent implements OnInit {
       if (this.displayedUserUid) {
         this.fetchUserProfile(this.displayedUserUid);
         this.loadUserPosts(this.displayedUserUid);
+        this.checkIfFollowing();
       }
     });
 
@@ -125,4 +129,25 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/messages', this.displayedUserUid]);
   }
 
+  private checkIfFollowing(): void {
+    if (this.currentUserUid && this.displayedUserUid) {
+      this.userService.fetchUserProfile(this.currentUserUid).then((currentUser) => {
+        this.isFollowing = currentUser.following.includes(this.displayedUserUid);
+      });
+    }
+  }
+  
+  followUser(): void {
+    this.userService.followUser(this.currentUserUid, this.displayedUserUid).then(() => {
+      this.isFollowing = true;
+      this.fetchUserProfile(this.displayedUserUid);
+    });
+  }
+  
+  unfollowUser(): void {
+    this.userService.unfollowUser(this.currentUserUid, this.displayedUserUid).then(() => {
+      this.isFollowing = false;
+      this.fetchUserProfile(this.displayedUserUid);
+    });
+  }
 }

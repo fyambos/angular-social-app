@@ -4,5 +4,7 @@ export interface User {
     profilePicture: string;
     bio: string;
     joinedDate: string;
+    followers: string[];
+    following: string[];
   }
   

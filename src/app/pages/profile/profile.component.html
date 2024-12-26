@@ -30,6 +30,20 @@
   > 
     Edit Profile 
   </button> 
+  <div class="flex items-center space-x-4">
+    <button 
+      *ngIf="!isCurrentUserProfile() && !isFollowing" 
+      class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+      (click)="followUser()">
+      Follow
+    </button>
+    <button 
+      *ngIf="!isCurrentUserProfile() && isFollowing" 
+      class="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
+      (click)="unfollowUser()">
+      Unfollow
+    </button>
+  </div>
   <app-post-card 
     *ngFor="let post of posts" 
     [post]="post" 

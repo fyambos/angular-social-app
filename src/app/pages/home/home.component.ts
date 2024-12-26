@@ -19,7 +19,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     nickname: '',
     profilePicture: 'assets/default-profile-picture.jpg',
     bio: '',
-    joinedDate: ''
+    joinedDate: '',
+    followers: [],
+    following: []
   };
   currentUserUid: string = '';
   private postsSubscription?: Subscription;

@@ -3,7 +3,7 @@
 ## 🌟 Fonctionnalités
 
 - **Authentification Firebase**: Utilisation de Firebase pour gérer l'authentification des utilisateurs.
-- **Gestion des utilisateurs**: Affichage et modification des profils utilisateurs.
+- **Gestion des utilisateurs**: Affichage et modification des profils utilisateurs, fonctionnalité de follow et unfollow.
 - **Création de posts**: Ajout de nouveaux posts avec titre, contenu et date de publication.
 - **Affichage des posts**: Affichage des posts des utilisateurs avec leur photo de profil et leurs détails.
 - **Modération de profil**: Édition du profil utilisateur (nickname, bio, photo de profil).

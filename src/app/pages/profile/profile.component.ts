@@ -46,9 +46,7 @@ export class ProfileComponent implements OnInit {
       this.displayedUserUid = params.get('uid') || '';
       if (this.displayedUserUid) {
         this.fetchUserProfile(this.displayedUserUid);
-        this.loadUserPosts(this.displayedUserUid);
-        this.checkIfFollowing();
-      }
+        this.loadUserPosts(this.displayedUserUid);      }
     });
 
     onAuthStateChanged(this.auth, (user) => {
@@ -59,6 +57,7 @@ export class ProfileComponent implements OnInit {
           this.loadUserPosts(this.currentUserUid);
           this.displayedUserUid = this.currentUserUid;
         }
+        this.checkIfFollowing();
       }
     });
   }

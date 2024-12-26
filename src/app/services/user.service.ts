@@ -77,7 +77,7 @@ export class UserService {
       updateDoc(targetUserRef, {
         followers: arrayUnion(currentUserId),
       }),
-    ]).then(() => console.log('Followed user successfully.'));
+    ]).then();
   }
   
   unfollowUser(currentUserId: string, targetUserId: string): Promise<void> {
@@ -91,7 +91,7 @@ export class UserService {
       updateDoc(targetUserRef, {
         followers: arrayRemove(currentUserId),
       }),
-    ]).then(() => console.log('Unfollowed user successfully.'));
+    ]).then();
   }
   
   getFollowers(uid: string): Promise<UserProfile[]> {

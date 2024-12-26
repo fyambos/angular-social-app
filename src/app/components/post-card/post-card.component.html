@@ -16,8 +16,6 @@
       <span class="text-sm text-gray-500">{{ post.date | relativeDate }}</span>
     </div>
   </div>
-
-  <!-- Edit and Delete Icons at the Top Right -->
   <div *ngIf="post.user.id === currentUserUid" class="absolute top-2 right-2 flex space-x-4">
     <button (click)="openEditDialog()" class="text-gray-500 hover:text-blue-500" (click)="$event.stopPropagation()">
       <mat-icon>edit</mat-icon>
@@ -26,12 +24,10 @@
       <mat-icon>delete</mat-icon>
     </button>
   </div>
-
   <div>
     <h2 class="text-xl font-bold mb-2">{{ post.title }}</h2>
     <p class="text-gray-700">{{ post.content }}</p>
   </div>
-
   <div class="flex items-center justify-between mt-3">
     <button
       (click)="toggleReplyInput()"
@@ -65,7 +61,6 @@
       </div>
     </div>
   </div>
-
   <div class="mt-4">
     <div *ngIf="showReplyInput" class="mt-2">
       <textarea

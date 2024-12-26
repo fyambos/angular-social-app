@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, query, where, orderBy, addDoc, collectionGroup, doc, getDoc, onSnapshot, updateDoc, getDocs, writeBatch } from '@angular/fire/firestore';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { UserService } from './user.service';
 import { Message } from '../models/message.model';
 import { Conversation } from '../models/conversation.model';
 
@@ -10,8 +11,7 @@ import { Conversation } from '../models/conversation.model';
 export class MessageService {
   private conversationsSubject = new BehaviorSubject<Conversation[]>([]);
   conversations$ = this.conversationsSubject.asObservable();
-
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore, private userService: UserService) {}
 
   getConversations(currentUserId: string): void {
     const q = query(
@@ -50,7 +50,13 @@ export class MessageService {
       });
   
       const conversations = Array.from(conversationsMap.values());
-      this.conversationsSubject.next(conversations);
+      Promise.all(conversations.map(async (conversation) => {
+        conversation.nickname = await this.userService.fetchUserProfile(conversation.recipientId).then((userData) => userData.nickname);
+        conversation.profilePicture = await this.userService.fetchUserProfile(conversation.recipientId).then((userData) => userData.profilePicture);
+        return conversation;
+      })).then(updatedConversations => {
+        this.conversationsSubject.next(updatedConversations);
+      });
     });
   }
   

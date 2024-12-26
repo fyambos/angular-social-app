@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
 import { MessageService } from 'src/app/services/message.service';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -23,6 +23,7 @@ export class MessageComponent implements OnInit {
     private messageService: MessageService,
     private auth: Auth,
     private userService: UserService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -85,4 +86,9 @@ export class MessageComponent implements OnInit {
         .catch(error => console.error('Error sending message:', error));
     }
   }
+
+  navigateToUserProfile(): void {
+    this.router.navigate(['/profile', this.recipientId]);
+  }
+
 }

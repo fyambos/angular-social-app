@@ -35,9 +35,12 @@
           <img *ngIf="recipient.profilePicture"
                [src]="recipient.profilePicture"
                alt="Recipient Profile Picture"
-               class="w-10 h-10 rounded-full flex-shrink-0" />
+               class="w-10 h-10 rounded-full flex-shrink-0 cursor-pointer"
+               (click)="navigateToUserProfile()" />
           <div class="min-w-0 flex-1">
-            <h2 class="text-lg font-bold">{{ recipient.nickname }}</h2>
+            <h2 
+              class="text-lg font-bold cursor-pointer"
+              (click)="navigateToUserProfile()">{{ recipient.nickname }}</h2>
           </div>
         </div>
       </div>

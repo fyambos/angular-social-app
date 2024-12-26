@@ -22,26 +22,18 @@
       <mat-icon class="text-2xl">message</mat-icon>
     </button> 
   </div> 
- 
-  <button 
-    *ngIf="isCurrentUserProfile()" 
-    (click)="openEditProfileDialog()" 
-    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-6" 
-  > 
-    Edit Profile 
-  </button> 
   <div class="profile-follow-section flex items-center space-x-6 mb-6">
-    <button 
-      class=""
-      (click)="showFollowers()"
-    >
-      {{ userProfile.followers?.length || 0 }} Followers
-    </button>
     <button 
       class=""
       (click)="showFollowing()"
     >
-      {{ userProfile.following?.length || 0 }} Following
+      {{ userProfile.following.length || 0 }} Following
+    </button>
+    <button 
+      class=""
+      (click)="showFollowers()"
+    >
+      {{ userProfile.followers.length || 0 }} Follower{{ userProfile.followers.length === 1 ? '' : 's' }}
     </button>
     <button 
       *ngIf="!isCurrentUserProfile() && !isFollowing" 
@@ -55,6 +47,13 @@
       (click)="unfollowUser()">
       Unfollow
     </button>
+    <button 
+      *ngIf="isCurrentUserProfile()" 
+      (click)="openEditProfileDialog()" 
+      class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-6" 
+    > 
+      Edit Profile 
+    </button> 
   </div>
   <app-post-card 
     *ngFor="let post of posts" 

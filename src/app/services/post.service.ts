@@ -22,33 +22,40 @@ export class PostService {
     return this.posts$.asObservable();
   }
 
-  async initializePosts(): Promise<void> {
+  async fetchUserHomePosts(): Promise<void> {
     const postsCollection = collection(this.firestore, 'posts');
-  
-    onSnapshot(postsCollection, async (snapshot) => {
-      const postsList: Post[] = [];
-  
-      for (const docSnap of snapshot.docs) {
-        const postData = docSnap.data();
-  
-        if (!postData['replyToPostId']) {
-          const user = await this.userService.fetchUserProfile(postData['userId']);
-          
-          const post: Post = {
-            user,
-            id: docSnap.id,
-            title: postData['title'],
-            content: postData['content'],
-            date: postData['date'],
-            likes: postData['likes'] || [],
-          };
-          postsList.push(post);
-        }
+    this.userService.getCurrentUser().subscribe(async (currentUser) => {
+      if (!currentUser) {
+        console.error('No authenticated user found.');
+        return;
       }
-      postsList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      this.posts$.next(postsList);
+      const userProfile = await this.userService.fetchUserProfile(currentUser.uid);
+      const followingList = userProfile.following || [];
+      onSnapshot(postsCollection, async (snapshot) => {
+        const postsList: Post[] = [];
+        for (const docSnap of snapshot.docs) {
+          const postData = docSnap.data();
+          if (
+            !postData['replyToPostId'] &&
+            (postData['userId'] === currentUser.uid || followingList.includes(postData['userId']))
+          ) {
+            const user = await this.userService.fetchUserProfile(postData['userId']);
+            const post: Post = {
+              user,
+              id: docSnap.id,
+              title: postData['title'],
+              content: postData['content'],
+              date: postData['date'],
+              likes: postData['likes'] || [],
+            };
+            postsList.push(post);
+          }
+        }
+        postsList.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        this.posts$.next(postsList);
+      });
     });
-  }
+  }  
 
   async addPost(newPost: Post): Promise<void> {
     try {

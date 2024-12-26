@@ -28,7 +28,7 @@
     <h2 class="text-xl font-bold mb-2">{{ post.title }}</h2>
     <p class="text-gray-700">{{ post.content }}</p>
   </div>
-  <div class="flex items-center justify-between mt-3">
+  <div class="flex items-center justify-between mt-3" (click)="$event.stopPropagation">
     <button
       (click)="toggleReplyInput()"
       class="text-blue-500"
@@ -68,10 +68,11 @@
         rows="3"
         placeholder="Write your reply..."
         class="w-full p-2 border rounded"
+        click="$event.stopPropagation()"
       ></textarea>
       <div class="flex justify-end mt-2">
         <button
-          (click)="saveReply()"
+          (click)="saveReply(); $event.stopPropagation()"
           class="bg-blue-500 text-white px-4 py-2 rounded"
           [disabled]="!replyContent.trim()"
         >

@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (user) {
         this.currentUserUid = user.uid;
         this.fetchUserProfile(user.uid);
-        this.initializePosts();
+        this.fetchUserHomePosts();
       }
     });
   }
@@ -57,8 +57,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  private initializePosts(): void {
-    this.postService.initializePosts();
+  private fetchUserHomePosts(): void {
+    this.postService.fetchUserHomePosts();
     this.postsSubscription = this.postService.getPosts$().subscribe(posts => {
       this.posts = posts;
     });

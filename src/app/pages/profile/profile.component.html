@@ -13,64 +13,73 @@
         <p class="text-xs text-gray-400">Joined: {{ userProfile.joinedDate | date: 'short' }}</p> 
       </div> 
     </div>
-    <button  
-      *ngIf="!isCurrentUserProfile()"  
-      class="flex items-center justify-center space-x-2 rounded-full text-blue-500 hover:text-blue-600 hover:bg-gray-100 transition px-1" 
-      (click)="sendMessage()" 
-      aria-label="Send Message" 
-    > 
-      <mat-icon class="text-2xl">message</mat-icon>
-    </button> 
   </div> 
-  <div class="profile-follow-section flex items-center space-x-6 mb-6">
+  <div class="profile-follow-section flex items-center justify-start space-x-6 mb-6">
     <button 
-      class=""
+      class="flex items-center"
       (click)="showFollowing()"
     >
-      {{ userProfile.following.length || 0 }} Following
+      <span class="mr-2">{{ userProfile.following.length || 0 }} Following</span>
     </button>
     <button 
-      class=""
+      class="flex items-center"
       (click)="showFollowers()"
     >
-      {{ userProfile.followers.length || 0 }} Follower{{ userProfile.followers.length === 1 ? '' : 's' }}
+      <span class="mr-2">{{ userProfile.followers.length || 0 }} Follower{{ userProfile.followers.length === 1 ? '' : 's' }}</span>
     </button>
     <button 
       *ngIf="!isCurrentUserProfile() && !isFollowing" 
       class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-      (click)="followUser()">
+      (click)="followUser()"
+    >
       Follow
     </button>
     <button 
       *ngIf="!isCurrentUserProfile() && isFollowing" 
       class="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
-      (click)="unfollowUser()">
+      (click)="unfollowUser()"
+    >
       Unfollow
     </button>
     <button 
       *ngIf="isCurrentUserProfile()" 
       (click)="openEditProfileDialog()" 
-      class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-6" 
+      class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
     > 
       Edit Profile 
-    </button> 
+    </button>
+    <button  
+    *ngIf="!isCurrentUserProfile()"  
+    class="flex items-center justify-center text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-md transition-colors duration-300" 
+    (click)="sendMessage()" 
+    aria-label="Send Message"
+  > 
+    <i class="fa fa-comment text-xl"></i>
+  </button>
+  
   </div>
   <div class="toggle-section flex justify-center space-x-4 mb-6">
     <button 
-      [class.active]="currentView === 'posts'" 
-      class="toggle-btn" 
+      [class.bg-blue-500]="currentView === 'posts'" 
+      [class.text-white]="currentView === 'posts'"
+      [class.bg-gray-300]="currentView !== 'posts'" 
+      [class.text-gray-600]="currentView !== 'posts'"
+      class="toggle-btn rounded-full py-2 px-4 transition-colors duration-300 hover:bg-blue-400 hover:text-white"
       (click)="setView('posts')"
     >
       Posts
     </button>
     <button 
-      [class.active]="currentView === 'likedPosts'" 
-      class="toggle-btn" 
+      [class.bg-blue-500]="currentView === 'likedPosts'" 
+      [class.text-white]="currentView === 'likedPosts'"
+      [class.bg-gray-300]="currentView !== 'likedPosts'" 
+      [class.text-gray-600]="currentView !== 'likedPosts'"
+      class="toggle-btn rounded-full py-2 px-4 transition-colors duration-300 hover:bg-blue-400 hover:text-white"
       (click)="setView('likedPosts')"
     >
-      Liked Posts
+      Liked
     </button>
-  </div>
+  </div>  
   <div *ngIf="currentView === 'posts'">
     <app-post-card 
       *ngFor="let post of posts" 

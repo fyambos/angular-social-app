@@ -33,7 +33,7 @@ export class AuthService {
 
         const userProfile = {
           nickname: user.email?.split('@')[0],
-          bio: 'This is a default bio. Add your information here!',
+          bio: 'This user has not provided a bio yet.',
           joinedDate: new Date().toISOString(),
           profilePicture: 'assets/default-profile-picture.jpg',
 

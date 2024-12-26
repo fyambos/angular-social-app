@@ -26,7 +26,7 @@ import { NewPostDialogComponent } from './components/new-post-dialog/new-post-di
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { RelativeDatePipe } from './pipes/relative-date.pipe';
 import { PostComponent } from './pages/post/post.component';
-import { LikesModalComponent } from './components/likes-modal/likes-modal.component';
+import { UsersModalComponent } from './components/users-modal/users-modal.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { MessageComponent } from './components/message/message.component';
 import { ConversationsComponent } from './pages/conversations/conversations.component';
@@ -46,7 +46,7 @@ import { SearchComponent } from './pages/search/search.component';
     PostCardComponent,
     RelativeDatePipe,
     PostComponent,
-    LikesModalComponent,
+    UsersModalComponent,
     NotFoundComponent,
     MessageComponent,
     ConversationsComponent,

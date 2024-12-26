@@ -9,7 +9,7 @@ import { User } from 'src/app/models/user.model';
 import { Post } from 'src/app/models/post.model';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { LikesModalComponent } from 'src/app/components/likes-modal/likes-modal.component';
+import { UsersModalComponent } from 'src/app/components/users-modal/users-modal.component';
 
 @Component({
   selector: 'app-profile',
@@ -154,7 +154,7 @@ export class ProfileComponent implements OnInit {
 
   showFollowers(): void {
     this.userService.getFollowers(this.displayedUserUid).then((followers) => {
-      this.dialog.open(LikesModalComponent, {
+      this.dialog.open(UsersModalComponent, {
         width: '400px',
         data: { 
           users: followers,
@@ -166,7 +166,7 @@ export class ProfileComponent implements OnInit {
   
   showFollowing(): void {
     this.userService.getFollowing(this.displayedUserUid).then((following) => {
-      this.dialog.open(LikesModalComponent, {
+      this.dialog.open(UsersModalComponent, {
         width: '400px',
         data: { 
           users: following,

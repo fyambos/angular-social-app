@@ -4,7 +4,7 @@ import { Post } from 'src/app/models/post.model';
 import { PostService } from 'src/app/services/post.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { LikesModalComponent } from 'src/app/components/likes-modal/likes-modal.component';
+import { UsersModalComponent } from 'src/app/components/users-modal/users-modal.component';
 import { User } from 'src/app/models/user.model';
 import { NewPostDialogComponent } from 'src/app/components/new-post-dialog/new-post-dialog.component';
 
@@ -122,7 +122,7 @@ export class PostCardComponent implements OnInit {
 
   openLikesModal(): void {
     this.postService.getUsersWhoLiked(this.post.id).then((users: User[]) => {
-      this.dialog.open(LikesModalComponent, {
+      this.dialog.open(UsersModalComponent, {
         width: '400px',
         data: { 
           users,

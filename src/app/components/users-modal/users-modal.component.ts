@@ -4,10 +4,10 @@ import { User } from 'src/app/models/user.model';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-likes-modal',
-  templateUrl: './likes-modal.component.html',
+  selector: 'app-users-modal',
+  templateUrl: './users-modal.component.html',
 })
-export class LikesModalComponent {
+export class UsersModalComponent {
   title: string;
 
   constructor(

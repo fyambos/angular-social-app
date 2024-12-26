@@ -92,19 +92,42 @@ export class PostService {
   
   
 
-  likePost(postId: string, userId: string): Promise<void> {
+  async likePost(postId: string, userId: string): Promise<void> {
     const postRef = doc(this.firestore, `posts/${postId}`);
-    return updateDoc(postRef, {
-      likes: arrayUnion(userId),
-    });
+    const userRef = doc(this.firestore, `users/${userId}`);
+    try {
+      await Promise.all([
+        updateDoc(postRef, {
+          likes: arrayUnion(userId),
+        }),
+        updateDoc(userRef, {
+          likedPosts: arrayUnion(postId),
+        }),
+      ]);
+    } catch (error) {
+      console.error('Error liking post:', error);
+      throw new Error('Error liking post');
+    }
   }
-
-  unlikePost(postId: string, userId: string): Promise<void> {
+  
+  async unlikePost(postId: string, userId: string): Promise<void> {
     const postRef = doc(this.firestore, `posts/${postId}`);
-    return updateDoc(postRef, {
-      likes: arrayRemove(userId),
-    });
+    const userRef = doc(this.firestore, `users/${userId}`);
+    try {
+      await Promise.all([
+        updateDoc(postRef, {
+          likes: arrayRemove(userId),
+        }),
+        updateDoc(userRef, {
+          likedPosts: arrayRemove(postId),
+        }),
+      ]);
+    } catch (error) {
+      console.error('Error unliking post:', error);
+      throw new Error('Error unliking post');
+    }
   }
+  
 
   async getPostById(postId: string): Promise<any> {
     const postDocRef = doc(this.firestore, `posts/${postId}`);
@@ -294,5 +317,16 @@ export class PostService {
       throw new Error('Error updating post');
     }
   }
+
+  async getLikedPosts(userId: string): Promise<Post[]> {
+    const userProfile = await this.userService.fetchUserProfile(userId);
+    const likedPostIds = userProfile.likedPosts || [];
+    const sortedPostIds = likedPostIds.reverse();
+    const posts = await Promise.all(
+      sortedPostIds.map((postId) => this.getPostById(postId))
+    );
+    return posts;
+  }
+  
 
 }

@@ -55,12 +55,36 @@
       Edit Profile 
     </button> 
   </div>
-  <app-post-card 
-    *ngFor="let post of posts" 
-    [post]="post" 
-    [currentUserUid]="currentUserUid" 
-  ></app-post-card> 
-   
+  <div class="toggle-section flex justify-center space-x-4 mb-6">
+    <button 
+      [class.active]="currentView === 'posts'" 
+      class="toggle-btn" 
+      (click)="setView('posts')"
+    >
+      Posts
+    </button>
+    <button 
+      [class.active]="currentView === 'likedPosts'" 
+      class="toggle-btn" 
+      (click)="setView('likedPosts')"
+    >
+      Liked Posts
+    </button>
+  </div>
+  <div *ngIf="currentView === 'posts'">
+    <app-post-card 
+      *ngFor="let post of posts" 
+      [post]="post" 
+      [currentUserUid]="currentUserUid" 
+    ></app-post-card> 
+  </div>
+  <div *ngIf="currentView === 'likedPosts'">
+    <app-post-card
+      *ngFor="let likedPost of likedPosts"
+      [post]="likedPost"
+      [currentUserUid]="currentUserUid"
+    ></app-post-card>
+  </div>
   <button 
     class="fixed bottom-20 right-6 bg-blue-500 text-white rounded-full p-4 shadow-lg flex items-center justify-center z-10" 
     (click)="openNewPostDialog()" 

@@ -29,6 +29,8 @@ export class ProfileComponent implements OnInit {
   currentUserUid: string = '';
   displayedUserUid: string = '';
   isFollowing: boolean = false;
+  currentView: 'posts' | 'likedPosts' = 'posts';
+  likedPosts: Post[] = []; 
 
   constructor(
     public dialog: MatDialog,
@@ -175,4 +177,20 @@ export class ProfileComponent implements OnInit {
       });
     });
   }
+  setView(view: 'posts' | 'likedPosts'): void {
+    this.currentView = view;
+    if (view === 'likedPosts') {
+      this.loadLikedPosts();
+    } else {
+      this.loadUserPosts(this.displayedUserUid);
+    }
+  }
+  private async loadLikedPosts(): Promise<void> {
+    try {
+      this.likedPosts = await this.postService.getLikedPosts(this.userProfile.id);
+    } catch (error) {
+      console.error('Error fetching liked posts:', error);
+    }
+  }
+  
 }

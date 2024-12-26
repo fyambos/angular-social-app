@@ -33,6 +33,7 @@ export class UserService {
           joinedDate: userData['joinedDate'] || '',
           followers: userData['followers'] || [],
           following: userData['following'] || [],
+          likedPosts: userData['likedPosts'] || [],
         } as UserProfile;
       } else {
         console.error(`User profile not found for uid: ${uid}, document path: users/${uid}`);

@@ -6,5 +6,6 @@ export interface User {
     joinedDate: string;
     followers: string[];
     following: string[];
+    likedPosts?: string[];
   }
   

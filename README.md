@@ -1,5 +1,19 @@
 # Post App
 
+<div align="center">
+
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](#)
+[![Angular](https://img.shields.io/badge/Angular-%23DD0031.svg?logo=angular&logoColor=white)](#)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC.svg?logo=tailwind-css&logoColor=white)](#)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff)](#)
+[![Firebase](https://img.shields.io/badge/Firebase-039BE5?logo=Firebase&logoColor=white)](#)
+
+<h3>Application de réseau social</h3>
+
+Application de réseau social, permettant aux utilisateurs de mettre en ligne des posts et envoyer des messages privés.
+
+</div>
+
 ## 🌟 Fonctionnalités
 
 - **Authentification Firebase**: Utilisation de Firebase pour gérer l'authentification des utilisateurs.

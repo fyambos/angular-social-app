@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from '@angular/fire/auth';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Firestore, doc, setDoc } from '@angular/fire/firestore';
-import { User } from 'firebase/auth';
+import { User, UserCredential, updateProfile } from 'firebase/auth';
+import { serverTimestamp } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ import { User } from 'firebase/auth';
 export class AuthService {
   constructor(private auth: Auth, private firestore: Firestore, private snackBar: MatSnackBar) {}
 
-  signIn(email: string, password: string): Promise<any> {
+  signIn(email: string, password: string): Promise<void> {
     return signInWithEmailAndPassword(this.auth, email, password)
       .then(() => {
         this.snackBar.open('Logged in successfully!', 'Close', {
@@ -23,36 +24,43 @@ export class AuthService {
           duration: 3000,
           panelClass: ['error-snackbar'],
         });
+        throw error;
       });
   }
 
-  signUp(email: string, password: string): Promise<any> {
-    return createUserWithEmailAndPassword(this.auth, email, password)
-      .then(async (userCredential) => {
-        const user: User = userCredential.user;
+  async signUp(email: string, password: string): Promise<UserCredential> {
+    try {
+      const cred: UserCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+      const user: User = cred.user;
+      const uid = user.uid;
+      const nickname = user.email?.split('@')[0] ?? '';
+      
+      // créer/mettre à jour le doc profil avec merge:true (idempotent)
+      const userDocRef = doc(this.firestore, `users/${uid}`);
+      await setDoc(userDocRef, {
+        id: uid,
+        nickname,
+        bio: 'This user has not provided a bio yet.',
+        profilePicture: 'assets/default-profile-picture.jpg',
+        joinedDate: new Date().toISOString(),
+        followers: [],
+        following: [],
+        likedPosts: [],
+      }, { merge: true });
 
-        const userProfile = {
-          nickname: user.email?.split('@')[0],
-          bio: 'This user has not provided a bio yet.',
-          joinedDate: new Date().toISOString(),
-          profilePicture: 'assets/default-profile-picture.jpg',
-
-        };
-
-        const userDocRef = doc(this.firestore, `users/${user.uid}`);
-        await setDoc(userDocRef, userProfile);
-
-        this.snackBar.open('Account created successfully!', 'Close', {
-          duration: 3000,
-          panelClass: ['success-snackbar'],
-        });
-      })
-      .catch((error) => {
-        this.snackBar.open(error.message, 'Close', {
-          duration: 3000,
-          panelClass: ['error-snackbar'],
-        });
+      this.snackBar.open('Account created successfully!', 'Close', {
+        duration: 3000,
+        panelClass: ['success-snackbar'],
       });
+
+      return cred;
+    } catch (error: any) {
+      this.snackBar.open(error?.message ?? 'Sign up failed', 'Close', {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+      });
+      throw error;
+    }
   }
 
   logout(): Promise<void> {
@@ -63,5 +71,4 @@ export class AuthService {
       });
     });
   }
-  
 }

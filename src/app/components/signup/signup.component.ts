@@ -16,14 +16,13 @@ export class SignupComponent {
     private router: Router,
   ) {}
 
-  signup() {
-    this.authService
-      .signUp(this.email, this.password)
-      .then(() => {
-        this.router.navigate(['/home']);
-      })
-      .catch((error) => {
-        this.signupError = error.message;
-      });
+  async signup() {
+    this.signupError = '';
+    try {
+      await this.authService.signUp(this.email, this.password);
+      await this.router.navigate(['/home']);
+    } catch (error: any) {
+      this.signupError = error?.message ?? 'Sign up failed';
+    }
   }
 }
